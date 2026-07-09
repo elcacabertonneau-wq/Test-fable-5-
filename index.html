@@ -25,6 +25,7 @@
   }
   *{box-sizing:border-box; margin:0; padding:0}
   html,body{height:100%}
+  body{height:100dvh}
   body{
     font-family:-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
     background:var(--bg); color:var(--text); display:flex; flex-direction:column;
@@ -167,6 +168,10 @@
     color:var(--err); border-bottom:1px solid var(--border); white-space:pre-wrap;
   }
 
+  @media (pointer:coarse){
+    /* iOS Safari zoome sur tout champ dont la police est < 16px */
+    .gutter, .code-wrap pre, .code-wrap textarea{font-size:16px}
+  }
   @media (max-width:760px){
     main{flex-direction:column}
     #editorPane{flex:0 0 50%}
