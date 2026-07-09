@@ -176,6 +176,55 @@
     color:var(--err); border-bottom:1px solid var(--border); white-space:pre-wrap;
   }
 
+  /* ---------- Projets (tiroir) ---------- */
+  #projNom{
+    font-size:12.5px; color:var(--muted); max-width:180px; overflow:hidden;
+    text-overflow:ellipsis; white-space:nowrap;
+    border-bottom:1px dashed transparent; padding-bottom:1px;
+  }
+  #projNom:hover{color:var(--text); border-bottom-color:var(--muted)}
+  #drawerFond{
+    position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:70;
+    opacity:0; pointer-events:none; transition:opacity .2s;
+  }
+  #drawerFond.open{opacity:1; pointer-events:auto}
+  #drawer{
+    position:fixed; top:0; right:0; height:100%; width:min(340px,92vw);
+    transform:translateX(105%); transition:transform .25s;
+    background:var(--panel); border-left:1px solid var(--border);
+    z-index:71; display:flex; flex-direction:column; box-shadow:var(--shadow);
+  }
+  #drawer.open{transform:none}
+  .drawer-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 16px; border-bottom:1px solid var(--border); font-weight:600; font-size:14px;
+  }
+  .drawer-head button{color:var(--muted); padding:4px 9px; border-radius:6px; font-size:14px}
+  .drawer-head button:hover{color:var(--text); background:var(--panel2)}
+  #projList{flex:1; overflow:auto; padding:10px 12px}
+  .proj-item{display:flex; align-items:stretch; gap:6px; margin-bottom:8px}
+  .proj-open{
+    flex:1; min-width:0; text-align:left; padding:10px 12px;
+    background:var(--panel2); border:1px solid var(--border); border-radius:8px;
+    display:flex; flex-direction:column; gap:3px; transition:border-color .15s;
+  }
+  .proj-open:hover{border-color:var(--accent)}
+  .proj-item.actif .proj-open{border-color:var(--accent); background:var(--bg)}
+  .proj-open .nom{font-size:13.5px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .proj-open .meta{font-size:11.5px; color:var(--muted)}
+  .proj-mini{
+    padding:0 10px; color:var(--muted); border:1px solid var(--border);
+    border-radius:8px; background:var(--panel2); font-size:13px;
+  }
+  .proj-mini:hover{color:var(--text); border-color:var(--accent)}
+  .drawer-foot{
+    padding:12px 14px; border-top:1px solid var(--border);
+    display:flex; flex-direction:column; gap:8px;
+  }
+  .drawer-foot .btn{justify-content:center}
+  .drawer-io{display:flex; gap:8px}
+  .drawer-io .btn{flex:1}
+
   @media (pointer:coarse){
     /* iOS Safari zoome sur tout champ dont la police est < 16px */
     .gutter, .code-wrap pre, .code-wrap textarea{font-size:16px}
@@ -192,8 +241,10 @@
 
 <header>
   <div class="logo"><span class="gem">⬢</span> Polyglotte</div>
+  <button id="projNom" title="Renommer le projet"></button>
   <nav class="modes" id="modes"></nav>
   <div class="actions">
+    <button class="btn" id="projBtn" title="Mes projets">🗂 <span class="label-txt">Projets</span></button>
     <span class="toggle on" id="autoToggle" title="Exécution automatique pendant la frappe">
       <span class="track"></span><span>Auto</span>
     </span>
@@ -227,6 +278,23 @@
     </div>
   </section>
 </main>
+
+<div id="drawerFond"></div>
+<aside id="drawer" aria-label="Mes projets">
+  <div class="drawer-head">
+    <span>Mes projets</span>
+    <button id="drawerClose" title="Fermer">✕</button>
+  </div>
+  <div id="projList"></div>
+  <div class="drawer-foot">
+    <button class="btn primary" id="projNouveau">＋ Nouveau projet</button>
+    <div class="drawer-io">
+      <button class="btn" id="projExport" title="Télécharger tous les projets en fichier JSON">⬇ Exporter</button>
+      <button class="btn" id="projImport" title="Recharger des projets depuis un fichier JSON">⬆ Importer</button>
+      <input type="file" id="projFile" accept=".json,application/json" hidden>
+    </div>
+  </div>
+</aside>
 
 <footer>
   <span class="status" id="statusOk"><span class="led"></span><span id="statusTxt">Prêt</span></span>
@@ -761,9 +829,9 @@ $("#themeBtn").addEventListener("click", () => {
   save();
 });
 $("#resetBtn").addEventListener("click", () => {
-  if (!confirm("Restaurer les exemples par défaut ? Ton code actuel sera perdu.")) return;
+  if (!confirm("Restaurer les exemples par défaut dans ce projet ? Son code actuel sera perdu.")) return;
   state.docs = { ...EXAMPLES };
-  for (const [id, ed] of Object.entries(editors)){ ed.ta.value = state.docs[id]; ed.refresh(); }
+  chargeDansEditeurs();
   save(); run();
 });
 
@@ -790,26 +858,175 @@ $("#resetBtn").addEventListener("click", () => {
   });
 })();
 
-/* ---------- Persistance ---------- */
-const STORE = "polyglotte.v1";
+/* ---------- Persistance & projets ---------- */
+const STORE = "polyglotte.v2", STORE_V1 = "polyglotte.v1";
+let projets = {}, projetActif = null;
+
+function uid(){ return "p" + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+
 function save(){
-  try { localStorage.setItem(STORE, JSON.stringify({ mode:state.mode, docs:state.docs, autorun:state.autorun, theme:state.theme })); }
+  if (projetActif && projets[projetActif]){
+    const p = projets[projetActif];
+    p.docs = state.docs; p.mode = state.mode; p.modif = Date.now();
+  }
+  try { localStorage.setItem(STORE, JSON.stringify({ theme:state.theme, autorun:state.autorun, projetActif, projets })); }
   catch(e){ /* stockage indisponible : on continue sans persistance */ }
 }
 function load(){
   try {
     const raw = localStorage.getItem(STORE);
-    if (!raw) return;
-    const d = JSON.parse(raw);
-    if (d.docs) state.docs = { ...EXAMPLES, ...d.docs };
-    if (d.mode in MODES) state.mode = d.mode;
-    if (typeof d.autorun === "boolean") state.autorun = d.autorun;
-    if (d.theme) state.theme = d.theme;
+    if (raw){
+      const d = JSON.parse(raw);
+      if (d.projets && typeof d.projets === "object") projets = d.projets;
+      projetActif = d.projetActif;
+      if (typeof d.autorun === "boolean") state.autorun = d.autorun;
+      if (d.theme) state.theme = d.theme;
+    } else {
+      /* migration depuis l'ancien format mono-espace */
+      const v1 = localStorage.getItem(STORE_V1);
+      if (v1){
+        const d = JSON.parse(v1);
+        const id = uid();
+        projets[id] = {
+          nom:"Mon projet", docs:{ ...EXAMPLES, ...(d.docs || {}) },
+          mode: d.mode in MODES ? d.mode : "web", modif: Date.now(),
+        };
+        projetActif = id;
+        if (typeof d.autorun === "boolean") state.autorun = d.autorun;
+        if (d.theme) state.theme = d.theme;
+      }
+    }
   } catch(e){ /* données corrompues : on repart des exemples */ }
+  if (!projetActif || !projets[projetActif]){
+    const id = uid();
+    projets[id] = { nom:"Mon projet", docs:{ ...EXAMPLES }, mode:"web", modif:Date.now() };
+    projetActif = id;
+  }
+  const p = projets[projetActif];
+  state.docs = { ...EXAMPLES, ...p.docs };
+  state.mode = p.mode in MODES ? p.mode : "web";
 }
 
+function chargeDansEditeurs(){
+  for (const [id, ed] of Object.entries(editors)){ ed.ta.value = state.docs[id] ?? ""; ed.refresh(); }
+}
+function majNomProjet(){ $("#projNom").textContent = projets[projetActif].nom; }
+
+function activeProjet(id){
+  projetActif = id;
+  const p = projets[id];
+  state.docs = { ...EXAMPLES, ...p.docs };
+  chargeDansEditeurs();
+  setMode(p.mode in MODES ? p.mode : "web"); // setMode enchaîne save() + run()
+  majNomProjet();
+}
+function ouvreProjet(id){
+  if (id !== projetActif && projets[id]){ save(); activeProjet(id); }
+  rendListe(); fermeDrawer();
+}
+function nouveauProjet(){
+  const nom = prompt("Nom du nouveau projet :", "Sans titre");
+  if (nom === null) return;
+  save();
+  const id = uid();
+  projets[id] = { nom: nom.trim() || "Sans titre", docs:{ ...EXAMPLES }, mode:"web", modif:Date.now() };
+  activeProjet(id);
+  rendListe(); fermeDrawer();
+}
+function renommeProjet(id){
+  const nv = prompt("Nouveau nom :", projets[id].nom);
+  if (nv === null) return;
+  projets[id].nom = nv.trim() || projets[id].nom;
+  majNomProjet(); rendListe(); save();
+}
+function supprimeProjet(id){
+  if (!confirm("Supprimer « " + projets[id].nom + " » ? Cette action est définitive.")) return;
+  const etaitActif = id === projetActif;
+  delete projets[id];
+  if (etaitActif){
+    let suivant = Object.keys(projets).sort((a,b) => projets[b].modif - projets[a].modif)[0];
+    if (!suivant){
+      suivant = uid();
+      projets[suivant] = { nom:"Mon projet", docs:{ ...EXAMPLES }, mode:"web", modif:Date.now() };
+    }
+    activeProjet(suivant);
+  }
+  save(); rendListe();
+}
+
+function rendListe(){
+  const liste = $("#projList");
+  liste.innerHTML = "";
+  const ids = Object.keys(projets).sort((a,b) => projets[b].modif - projets[a].modif);
+  for (const id of ids){
+    const p = projets[id];
+    const item = document.createElement("div");
+    item.className = "proj-item" + (id === projetActif ? " actif" : "");
+    const open = document.createElement("button");
+    open.className = "proj-open";
+    const nom = document.createElement("span");
+    nom.className = "nom"; nom.textContent = p.nom;
+    const meta = document.createElement("span");
+    meta.className = "meta";
+    meta.textContent = (MODES[p.mode]?.label ?? "?") + " · " +
+      new Date(p.modif).toLocaleString("fr-FR", { day:"numeric", month:"short", hour:"2-digit", minute:"2-digit" });
+    open.append(nom, meta);
+    open.addEventListener("click", () => ouvreProjet(id));
+    const ren = document.createElement("button");
+    ren.className = "proj-mini"; ren.textContent = "✎"; ren.title = "Renommer";
+    ren.addEventListener("click", () => renommeProjet(id));
+    const sup = document.createElement("button");
+    sup.className = "proj-mini"; sup.textContent = "🗑"; sup.title = "Supprimer";
+    sup.addEventListener("click", () => supprimeProjet(id));
+    item.append(open, ren, sup);
+    liste.appendChild(item);
+  }
+}
+
+/* ---------- Tiroir des projets ---------- */
+function ouvreDrawer(){ rendListe(); $("#drawer").classList.add("open"); $("#drawerFond").classList.add("open"); }
+function fermeDrawer(){ $("#drawer").classList.remove("open"); $("#drawerFond").classList.remove("open"); }
+$("#projBtn").addEventListener("click", ouvreDrawer);
+$("#drawerClose").addEventListener("click", fermeDrawer);
+$("#drawerFond").addEventListener("click", fermeDrawer);
+$("#projNom").addEventListener("click", () => renommeProjet(projetActif));
+$("#projNouveau").addEventListener("click", nouveauProjet);
+document.addEventListener("keydown", e => { if (e.key === "Escape") fermeDrawer(); });
+
+/* ---------- Export / import des projets ---------- */
+$("#projExport").addEventListener("click", () => {
+  save();
+  const blob = new Blob([JSON.stringify({ polyglotte:2, projets }, null, 2)], { type:"application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = "polyglotte-projets.json"; a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+});
+$("#projImport").addEventListener("click", () => $("#projFile").click());
+$("#projFile").addEventListener("change", e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  f.text().then(txt => {
+    try {
+      const d = JSON.parse(txt);
+      const src = d.projets || {};
+      let n = 0;
+      for (const p of Object.values(src)){
+        if (!p || typeof p !== "object" || !p.docs) continue;
+        projets[uid() + n] = {
+          nom: String(p.nom || "Importé"), docs:{ ...EXAMPLES, ...p.docs },
+          mode: p.mode in MODES ? p.mode : "web", modif: Date.now(),
+        };
+        n++;
+      }
+      save(); rendListe();
+      alert(n ? n + " projet(s) importé(s)." : "Aucun projet trouvé dans ce fichier.");
+    } catch(err){ alert("Fichier invalide : " + err.message); }
+  });
+  e.target.value = "";
+});
+
 /* ---------- Démarrage ---------- */
-state.docs = { ...EXAMPLES };
 load();
 document.documentElement.dataset.theme = state.theme;
 $("#autoToggle").classList.toggle("on", state.autorun);
@@ -827,6 +1044,7 @@ for (const docId of Object.keys(DOC_META)){
   editors[docId].refresh();
 }
 setMode(state.mode);
+majNomProjet();
 </script>
 </body>
 </html>
