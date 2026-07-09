@@ -1,0 +1,1841 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Qui Scribit — Imprimerie à Ivry-sur-Seine</title>
+<meta name="description" content="Qui Scribit, imprimerie artisanale et créative à Ivry-sur-Seine. Impression numérique, offset, cartes de visite, affiches, packaging, grand format. Devis rapide en ligne.">
+<style>
+/* ==========================================================================
+   QUI SCRIBIT — Imprimerie · Bauhaus letterpress
+   Fichier unique auto-contenu (aucune ressource externe)
+   ========================================================================== */
+
+:root{
+  --ink:#131210;
+  --paper:#F5F1E8;
+  --paper-2:#EBE5D6;      /* papier ombré, biais chaud */
+  --paper-3:#E2DBC9;
+  --rouge:#D62828;
+  --jaune:#F4B400;
+  --bleu:#1D63A6;
+  --ligne:#131210;        /* couleur des filets */
+  --card:#F5F1E8;
+  --muted:#5d574b;
+  --emboss-hi:rgba(255,255,255,.85);
+  --emboss-lo:rgba(19,18,16,.28);
+  --shadow-block:8px 8px 0 var(--ink);
+  --font-display:"Futura","Futura PT","Avenir Next","Archivo Black","Arial Black",Impact,sans-serif;
+  --font-body:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","Cascadia Mono","Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --ink:#F0EAD9;
+    --paper:#161411;
+    --paper-2:#1E1B16;
+    --paper-3:#26221b;
+    --ligne:#F0EAD9;
+    --card:#1E1B16;
+    --muted:#a89f8c;
+    --jaune:#E8B424;
+    --rouge:#E23B3B;
+    --bleu:#3D83C4;
+    --emboss-hi:rgba(255,255,255,.10);
+    --emboss-lo:rgba(0,0,0,.7);
+    --shadow-block:8px 8px 0 rgba(240,234,217,.9);
+  }
+}
+:root[data-theme="light"]{
+  --ink:#131210; --paper:#F5F1E8; --paper-2:#EBE5D6; --paper-3:#E2DBC9;
+  --ligne:#131210; --card:#F5F1E8; --muted:#5d574b;
+  --rouge:#D62828; --jaune:#F4B400; --bleu:#1D63A6;
+  --emboss-hi:rgba(255,255,255,.85); --emboss-lo:rgba(19,18,16,.28);
+  --shadow-block:8px 8px 0 var(--ink);
+}
+:root[data-theme="dark"]{
+  --ink:#F0EAD9; --paper:#161411; --paper-2:#1E1B16; --paper-3:#26221b;
+  --ligne:#F0EAD9; --card:#1E1B16; --muted:#a89f8c;
+  --rouge:#E23B3B; --jaune:#E8B424; --bleu:#3D83C4;
+  --emboss-hi:rgba(255,255,255,.10); --emboss-lo:rgba(0,0,0,.7);
+  --shadow-block:8px 8px 0 rgba(240,234,217,.9);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+img,svg,canvas{max-width:100%;display:block}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--bleu);outline-offset:3px}
+::selection{background:var(--jaune);color:#131210}
+
+/* ---------- utilitaires typo ---------- */
+.display{
+  font-family:var(--font-display);
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:-.02em;
+  line-height:.95;
+  text-wrap:balance;
+}
+.eyebrow{
+  font-family:var(--font-mono);
+  font-size:.72rem;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  display:inline-flex;
+  align-items:center;
+  gap:.6em;
+}
+.eyebrow::before{
+  content:"";
+  width:.85em;height:.85em;
+  background:var(--rouge);
+  display:inline-block;
+  flex:none;
+}
+.eyebrow[data-forme="cercle"]::before{border-radius:50%;background:var(--bleu)}
+.eyebrow[data-forme="triangle"]::before{
+  background:transparent;
+  width:0;height:0;
+  border-left:.5em solid transparent;
+  border-right:.5em solid transparent;
+  border-bottom:.9em solid var(--jaune);
+}
+
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+
+section{padding:96px 0;border-top:4px solid var(--ligne)}
+.section-head{margin-bottom:56px}
+.section-head h2{
+  font-size:clamp(2.2rem,6vw,4.2rem);
+  margin:.35em 0 .2em;
+}
+.section-head p.lede{max-width:62ch;color:var(--muted);margin:0;font-size:1.05rem}
+
+/* Reveal titres lettre à lettre */
+.split-reveal .ltr{
+  display:inline-block;
+  transform:translateY(110%) rotate(4deg);
+  opacity:0;
+  transition:transform .55s cubic-bezier(.2,.9,.25,1),opacity .3s linear;
+}
+.split-reveal .wd{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.08em}
+.split-reveal.in .ltr{transform:translateY(0) rotate(0);opacity:1}
+
+/* Reveal blocs au scroll */
+.fx{opacity:0;transform:translateY(26px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.8,.3,1)}
+.fx.in{opacity:1;transform:none}
+.fx-d1{transition-delay:.08s}.fx-d2{transition-delay:.16s}.fx-d3{transition-delay:.24s}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  .fx,.split-reveal .ltr{opacity:1!important;transform:none!important;transition:none!important}
+  *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+.site-header{
+  position:sticky;top:0;z-index:60;
+  background:var(--paper);
+  border-bottom:4px solid var(--ligne);
+}
+.site-header .bar{
+  max-width:1200px;margin:0 auto;padding:0 24px;
+  display:flex;align-items:center;gap:28px;
+  height:72px;
+}
+.logo{
+  display:flex;align-items:center;gap:12px;
+  text-decoration:none;
+  font-family:var(--font-display);font-weight:900;
+  text-transform:uppercase;letter-spacing:-.01em;
+  font-size:1.15rem;line-height:1;
+}
+.logo .cassetin{
+  width:38px;height:38px;flex:none;
+  display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;
+  border:3px solid var(--ligne);
+}
+.logo .cassetin i{display:block}
+.logo .cassetin i:nth-child(1){background:var(--rouge)}
+.logo .cassetin i:nth-child(2){background:var(--paper)}
+.logo .cassetin i:nth-child(3){background:var(--bleu)}
+.logo .cassetin i:nth-child(4){background:var(--jaune)}
+.logo small{display:block;font-family:var(--font-mono);font-weight:400;font-size:.58rem;letter-spacing:.28em;color:var(--muted)}
+
+.main-nav{display:flex;gap:4px;margin-left:auto}
+.main-nav a{
+  text-decoration:none;
+  font-family:var(--font-mono);font-size:.74rem;
+  text-transform:uppercase;letter-spacing:.14em;
+  padding:10px 12px;
+  border:2px solid transparent;
+}
+.main-nav a:hover{border-color:var(--ligne);background:var(--paper-2)}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.6em;
+  font-family:var(--font-display);font-weight:900;
+  text-transform:uppercase;letter-spacing:.04em;
+  font-size:.92rem;
+  padding:14px 26px;
+  background:var(--rouge);color:#F5F1E8;
+  border:3px solid var(--ink);
+  box-shadow:5px 5px 0 var(--ink);
+  text-decoration:none;
+  transition:transform .12s ease,box-shadow .12s ease,background .15s;
+  user-select:none;
+}
+:root[data-theme="dark"] .btn, .btn{--_btn-ink:var(--ligne)}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--ink)}
+.btn:active{transform:translate(4px,4px) scale(.97);box-shadow:0 0 0 var(--ink)} /* effet tampon encreur */
+.btn.ghost{background:var(--paper);color:var(--ink)}
+.btn.jaune{background:var(--jaune);color:#131210}
+.btn.bleu{background:var(--bleu);color:#F5F1E8}
+.btn.small{padding:9px 16px;font-size:.78rem;box-shadow:4px 4px 0 var(--ink)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:5px 5px 0 var(--ink)}
+
+.cart-btn{position:relative}
+.cart-badge{
+  position:absolute;top:-12px;right:-12px;
+  min-width:26px;height:26px;padding:0 6px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--jaune);color:#131210;
+  border:3px solid var(--ink);
+  border-radius:50%;
+  font-family:var(--font-mono);font-size:.78rem;font-weight:700;
+}
+.cart-badge.pop{animation:badge-pop .45s cubic-bezier(.3,1.6,.4,1)}
+@keyframes badge-pop{0%{transform:scale(.4)}55%{transform:scale(1.45)}100%{transform:scale(1)}}
+
+.burger{display:none;background:none;border:3px solid var(--ligne);padding:8px 10px;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase}
+
+@media (max-width:900px){
+  .main-nav{
+    display:none;
+    position:absolute;top:72px;left:0;right:0;
+    background:var(--paper);
+    border-bottom:4px solid var(--ligne);
+    flex-direction:column;padding:12px 24px 20px;
+  }
+  .main-nav.open{display:flex}
+  .burger{display:block;margin-left:auto}
+  .site-header .btn{display:none}
+}
+
+/* ==========================================================================
+   HERO
+   ========================================================================== */
+.hero{
+  border-top:none;
+  padding:0;
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(var(--paper-3) 1px,transparent 1px) 0 0/100% 56px,
+    linear-gradient(90deg,var(--paper-3) 1px,transparent 1px) 0 0/56px 100%,
+    var(--paper);
+}
+.hero .wrap{
+  display:grid;
+  grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
+  gap:40px;
+  align-items:center;
+  min-height:calc(100vh - 72px);
+  padding-top:48px;padding-bottom:48px;
+}
+.hero h1{
+  font-size:clamp(2.6rem,6.2vw,4.9rem);
+  margin:20px 0 22px;
+}
+.hero h1 .imp{color:var(--rouge)}
+.hero p.pitch{max-width:52ch;font-size:1.12rem;margin:0 0 34px;color:var(--muted)}
+.hero .cta-row{display:flex;flex-wrap:wrap;gap:18px}
+.hero-facts{
+  display:flex;flex-wrap:wrap;gap:0;
+  margin-top:48px;
+  border:3px solid var(--ligne);
+  background:var(--paper);
+}
+.hero-facts .fact{
+  flex:1 1 140px;
+  padding:14px 18px;
+  border-right:3px solid var(--ligne);
+}
+.hero-facts .fact:last-child{border-right:none}
+.hero-facts .fact b{display:block;font-family:var(--font-display);font-size:1.35rem;line-height:1.1}
+.hero-facts .fact span{font-family:var(--font-mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+
+.hero-stage{
+  position:relative;
+  border:4px solid var(--ligne);
+  background:#131210; /* toujours encre : le marbre de la presse ne change pas de thème */
+  box-shadow:var(--shadow-block);
+  aspect-ratio:4/4.4;
+  max-height:70vh;
+}
+.hero-stage canvas{width:100%;height:100%}
+.hero-stage .plaque{
+  position:absolute;left:-4px;bottom:-4px;
+  background:var(--jaune);color:#131210;
+  border:4px solid var(--ligne);
+  font-family:var(--font-mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;
+  padding:8px 14px;
+}
+@media (max-width:900px){
+  .hero .wrap{grid-template-columns:1fr;min-height:0}
+  .hero-stage{aspect-ratio:4/3;order:-1;margin-top:8px}
+}
+
+/* défilement marquee sous le hero */
+.marquee{
+  border-top:4px solid var(--ligne);
+  border-bottom:none;
+  background:var(--ink);color:var(--paper);
+  overflow:hidden;white-space:nowrap;
+  padding:14px 0;
+}
+:root[data-theme="dark"] .marquee{background:var(--paper-2);color:var(--ink);border-bottom:4px solid var(--ligne)}
+.marquee .track{
+  display:inline-block;
+  animation:defile 26s linear infinite;
+  font-family:var(--font-display);font-weight:900;text-transform:uppercase;
+  font-size:1rem;letter-spacing:.08em;
+}
+.marquee .track em{font-style:normal;color:var(--jaune);margin:0 1.2em}
+@keyframes defile{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ==========================================================================
+   SERVICES
+   ========================================================================== */
+.services-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:28px;
+}
+.service-card{
+  position:relative;
+  border:3px solid var(--ligne);
+  background:var(--card);
+  padding:26px 24px 24px;
+  display:flex;flex-direction:column;gap:14px;
+  transform-style:preserve-3d;
+  transition:box-shadow .2s ease;
+  will-change:transform;
+}
+.service-card:hover{box-shadow:10px 12px 0 rgba(19,18,16,.18)}
+:root[data-theme="dark"] .service-card:hover{box-shadow:10px 12px 0 rgba(0,0,0,.5)}
+.service-card .glyphe{
+  width:64px;height:64px;flex:none;
+  border:3px solid var(--ligne);
+  display:grid;place-items:center;
+  background:var(--paper-2);
+}
+.service-card h3{
+  font-family:var(--font-display);font-weight:900;text-transform:uppercase;
+  font-size:1.25rem;letter-spacing:-.01em;margin:0;
+}
+.service-card p{margin:0;color:var(--muted);font-size:.95rem;flex:1}
+.service-card .specs{
+  font-family:var(--font-mono);font-size:.68rem;letter-spacing:.06em;
+  color:var(--muted);
+  border-top:2px dashed var(--muted);
+  padding-top:10px;
+}
+.service-card .btn{align-self:flex-start;margin-top:4px}
+
+/* ==========================================================================
+   SAVOIR-FAIRE — timeline
+   ========================================================================== */
+.savoir{background:var(--paper-2)}
+.timeline{
+  display:grid;gap:0;
+  border-left:4px solid var(--ligne);
+  margin-left:14px;
+}
+.tl-step{
+  position:relative;
+  padding:26px 0 30px 44px;
+}
+.tl-step::before{
+  content:"";
+  position:absolute;left:-16px;top:32px;
+  width:28px;height:28px;
+  border:4px solid var(--ligne);
+  background:var(--paper);
+}
+.tl-step:nth-child(3n+1)::before{background:var(--rouge);border-radius:50%}
+.tl-step:nth-child(3n+2)::before{background:var(--jaune)}
+.tl-step:nth-child(3n+3)::before{background:var(--bleu);transform:rotate(45deg)}
+.tl-step h3{
+  font-family:var(--font-display);font-weight:900;text-transform:uppercase;
+  margin:0 0 6px;font-size:1.3rem;
+}
+.tl-step .annee{
+  font-family:var(--font-mono);font-size:.7rem;letter-spacing:.2em;color:var(--muted);
+  text-transform:uppercase;
+}
+.tl-step p{max-width:64ch;margin:8px 0 0;color:var(--muted)}
+.savoir-cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:start}
+.savoir-manifeste{
+  border:4px solid var(--ligne);
+  background:var(--paper);
+  padding:34px 30px;
+  box-shadow:var(--shadow-block);
+  position:sticky;top:104px;
+}
+.savoir-manifeste .grand{
+  font-family:var(--font-display);font-weight:900;text-transform:uppercase;
+  font-size:clamp(1.6rem,3vw,2.3rem);line-height:1.02;margin:0 0 18px;
+  /* effet gaufrage / embossage */
+  color:var(--paper-2);
+  text-shadow:1px 1px 0 var(--emboss-hi),-1px -1px 1px var(--emboss-lo);
+}
+.savoir-manifeste p{margin:0;color:var(--muted)}
+@media (max-width:900px){.savoir-cols{grid-template-columns:1fr}.savoir-manifeste{position:static}}
+
+/* ==========================================================================
+   PORTFOLIO
+   ========================================================================== */
+.filtres{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:36px}
+.filtre{
+  font-family:var(--font-mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  background:var(--paper);border:3px solid var(--ligne);
+  padding:9px 16px;
+}
+.filtre[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.pf-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:28px;
+}
+.pf-item{border:3px solid var(--ligne);background:var(--card);transition:opacity .3s,transform .3s;will-change:transform}
+.pf-item.masque{display:none}
+.pf-item .visuel{
+  aspect-ratio:4/5;
+  border-bottom:3px solid var(--ligne);
+  overflow:hidden;position:relative;
+}
+.pf-item .visuel svg{width:100%;height:100%;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.pf-item:hover .visuel svg{transform:scale(1.06)}
+.pf-item figcaption{padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+.pf-item figcaption b{font-family:var(--font-display);font-weight:900;text-transform:uppercase;font-size:.95rem}
+.pf-item figcaption span{font-family:var(--font-mono);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+
+/* ==========================================================================
+   CONFIGURATEUR
+   ========================================================================== */
+.config{background:var(--ink);color:var(--paper);border-top:4px solid var(--ligne)}
+:root[data-theme="dark"] .config{background:var(--paper-2);color:var(--ink)}
+.config .eyebrow,.config .section-head p.lede{color:inherit;opacity:.75}
+.config-box{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;
+  background:var(--paper);color:var(--ink);
+  border:4px solid var(--ligne);
+  padding:30px;
+  box-shadow:10px 10px 0 var(--rouge);
+}
+.config-box .champ{display:flex;flex-direction:column;gap:8px}
+.config-box label{font-family:var(--font-mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase}
+.config-box select,.config-box input{
+  border:3px solid var(--ligne);background:var(--paper);
+  padding:12px 12px;font-size:.95rem;border-radius:0;
+  appearance:auto;
+}
+.config-box .action{display:flex;align-items:flex-end}
+.config-note{margin-top:18px;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.1em;opacity:.7}
+
+/* ==========================================================================
+   AVIS
+   ========================================================================== */
+.avis-resume{
+  display:flex;flex-wrap:wrap;align-items:center;gap:28px;
+  border:4px solid var(--ligne);background:var(--card);
+  padding:26px 30px;margin-bottom:36px;
+  box-shadow:var(--shadow-block);
+}
+.avis-resume .note{
+  font-family:var(--font-display);font-weight:900;
+  font-size:clamp(3rem,7vw,4.6rem);line-height:1;
+  font-variant-numeric:tabular-nums;
+}
+.etoiles{display:flex;gap:4px}
+.etoiles svg{width:30px;height:30px}
+.avis-resume .detail{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.avis-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px}
+.avis-card{border:3px solid var(--ligne);background:var(--card);padding:22px}
+.avis-card .qui{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.avis-card .pastille{
+  width:42px;height:42px;flex:none;border:3px solid var(--ligne);
+  display:grid;place-items:center;
+  font-family:var(--font-display);font-weight:900;
+}
+.avis-card .qui b{display:block;font-size:.95rem}
+.avis-card .qui span{font-family:var(--font-mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.avis-card p{margin:0;color:var(--muted);font-size:.94rem}
+
+/* ==========================================================================
+   LOCALISATION
+   ========================================================================== */
+.loc-cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:40px;align-items:stretch}
+.loc-infos{display:flex;flex-direction:column;gap:0;border:4px solid var(--ligne);background:var(--card)}
+.loc-infos>div{padding:22px 26px;border-bottom:3px solid var(--ligne)}
+.loc-infos>div:last-child{border-bottom:none}
+.loc-infos h3{font-family:var(--font-display);font-weight:900;text-transform:uppercase;margin:0 0 8px;font-size:1.05rem}
+.loc-infos p,.loc-infos address{margin:0;font-style:normal;color:var(--muted)}
+.loc-infos a.tel{font-family:var(--font-display);font-weight:900;font-size:1.5rem;text-decoration:none;color:var(--ink)}
+.horaires{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.horaires td{padding:4px 0;font-size:.92rem;color:var(--muted)}
+.horaires td:last-child{text-align:right;font-family:var(--font-mono);font-size:.8rem}
+.horaires tr.ouvert td{color:var(--ink);font-weight:600}
+.badge-ouvert{
+  display:inline-block;background:var(--jaune);color:#131210;
+  border:2px solid var(--ligne);
+  font-family:var(--font-mono);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;
+  padding:3px 9px;margin-left:8px;vertical-align:middle;
+}
+.plan{
+  border:4px solid var(--ligne);
+  background:var(--paper-2);
+  box-shadow:var(--shadow-block);
+  position:relative;overflow:hidden;
+  min-height:380px;
+}
+.plan svg{position:absolute;inset:0;width:100%;height:100%}
+@media (max-width:900px){.loc-cols{grid-template-columns:1fr}}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+.site-footer{
+  border-top:4px solid var(--ligne);
+  background:var(--ink);color:var(--paper);
+  padding:64px 0 32px;
+}
+:root[data-theme="dark"] .site-footer{background:var(--paper-2);color:var(--ink)}
+.site-footer .cols{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px}
+.site-footer h4{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;opacity:.65;margin:0 0 14px}
+.site-footer ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.site-footer a{text-decoration:none;font-size:.92rem;opacity:.9}
+.site-footer a:hover{text-decoration:underline;text-underline-offset:3px}
+.site-footer .marque{font-family:var(--font-display);font-weight:900;text-transform:uppercase;font-size:1.6rem;line-height:1;margin:0 0 12px}
+.site-footer .marque i{font-style:normal;color:var(--jaune)}
+.site-footer p{opacity:.7;font-size:.9rem;max-width:38ch}
+.site-footer .bas{
+  margin-top:52px;padding-top:20px;
+  border-top:1px solid currentColor;
+  display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;
+  font-family:var(--font-mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;opacity:.6;
+}
+@media (max-width:900px){.site-footer .cols{grid-template-columns:1fr 1fr}}
+
+/* ==========================================================================
+   PANIER (drawer)
+   ========================================================================== */
+.voile{
+  position:fixed;inset:0;background:rgba(19,18,16,.55);
+  opacity:0;pointer-events:none;transition:opacity .25s;z-index:80;
+}
+.voile.on{opacity:1;pointer-events:auto}
+.drawer{
+  position:fixed;top:0;right:0;bottom:0;z-index:90;
+  width:min(460px,100%);
+  background:var(--paper);color:var(--ink);
+  border-left:4px solid var(--ligne);
+  transform:translateX(102%);
+  transition:transform .35s cubic-bezier(.2,.9,.25,1);
+  display:flex;flex-direction:column;
+}
+.drawer.on{transform:none}
+.drawer header{
+  display:flex;align-items:center;gap:14px;
+  padding:20px 22px;border-bottom:4px solid var(--ligne);
+  background:var(--jaune);color:#131210;
+}
+.drawer header h2{font-family:var(--font-display);font-weight:900;text-transform:uppercase;font-size:1.2rem;margin:0;flex:1}
+.drawer header .fermer{background:none;border:3px solid #131210;color:#131210;width:38px;height:38px;font-size:1.1rem;line-height:1}
+.drawer .corps{flex:1;overflow-y:auto;padding:20px 22px;display:flex;flex-direction:column;gap:18px}
+.panier-vide{color:var(--muted);text-align:center;padding:48px 12px;font-size:.95rem}
+.panier-vide .glyphe-vide{width:70px;height:70px;margin:0 auto 18px;border:3px dashed var(--muted);display:grid;place-items:center;font-size:1.6rem}
+.ligne-devis{border:3px solid var(--ligne);background:var(--card)}
+.ligne-devis .titre{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  padding:12px 14px;border-bottom:2px solid var(--ligne);
+}
+.ligne-devis .titre b{font-family:var(--font-display);font-weight:900;text-transform:uppercase;font-size:.9rem}
+.ligne-devis .titre .actions{display:flex;gap:6px}
+.ligne-devis .titre .actions button{
+  background:var(--paper);border:2px solid var(--ligne);
+  width:30px;height:30px;font-size:.85rem;line-height:1;
+}
+.ligne-devis .titre .actions button:hover{background:var(--jaune);color:#131210}
+.ligne-devis .options{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px}
+.ligne-devis .options .champ{display:flex;flex-direction:column;gap:4px}
+.ligne-devis .options label{font-family:var(--font-mono);font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.ligne-devis .options select,.ligne-devis .options input{
+  border:2px solid var(--ligne);background:var(--paper);
+  padding:7px 8px;font-size:.85rem;width:100%;border-radius:0;
+}
+.drawer footer{padding:18px 22px;border-top:4px solid var(--ligne);display:flex;flex-direction:column;gap:10px}
+.drawer footer .compte{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+/* ==========================================================================
+   MODALE DEVIS
+   ========================================================================== */
+.modale{
+  position:fixed;inset:0;z-index:100;
+  display:grid;place-items:center;padding:20px;
+  background:rgba(19,18,16,.6);
+  opacity:0;pointer-events:none;transition:opacity .25s;
+}
+.modale.on{opacity:1;pointer-events:auto}
+.modale .boite{
+  width:min(640px,100%);max-height:92vh;overflow-y:auto;
+  background:var(--paper);color:var(--ink);
+  border:4px solid var(--ligne);
+  box-shadow:12px 12px 0 var(--rouge);
+  transform:translateY(24px) scale(.97);
+  transition:transform .3s cubic-bezier(.2,.9,.3,1);
+}
+.modale.on .boite{transform:none}
+.modale .boite header{
+  display:flex;align-items:center;gap:12px;
+  background:var(--rouge);color:#F5F1E8;
+  padding:18px 24px;border-bottom:4px solid var(--ligne);
+}
+.modale .boite header h2{font-family:var(--font-display);font-weight:900;text-transform:uppercase;font-size:1.2rem;margin:0;flex:1}
+.modale .boite header .fermer{background:none;border:3px solid #F5F1E8;color:#F5F1E8;width:38px;height:38px;font-size:1.1rem;line-height:1}
+.modale form{padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.modale .champ{display:flex;flex-direction:column;gap:6px}
+.modale .champ.large{grid-column:1/-1}
+.modale label{font-family:var(--font-mono);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase}
+.modale input,.modale textarea{
+  border:3px solid var(--ligne);background:var(--paper);
+  padding:12px;font-size:.95rem;border-radius:0;width:100%;
+}
+.modale textarea{min-height:90px;resize:vertical}
+.modale .erreur{font-size:.75rem;color:var(--rouge);min-height:1em;font-family:var(--font-mono)}
+.modale .recap{
+  grid-column:1/-1;
+  border:2px dashed var(--muted);
+  padding:14px;
+  font-family:var(--font-mono);font-size:.74rem;line-height:1.7;
+  white-space:pre-wrap;word-break:break-word;
+  max-height:180px;overflow-y:auto;
+  background:var(--paper-2);
+}
+.modale .pied{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.confirmation{padding:40px 28px;text-align:center;display:none}
+.confirmation.on{display:block}
+.confirmation .sceau{
+  width:96px;height:96px;margin:0 auto 20px;
+  border:4px solid var(--rouge);border-radius:50%;
+  display:grid;place-items:center;
+  color:var(--rouge);
+  font-family:var(--font-display);font-weight:900;font-size:.7rem;
+  text-transform:uppercase;letter-spacing:.1em;
+  transform:rotate(-8deg);
+  animation:tampon .5s cubic-bezier(.2,1.6,.4,1);
+}
+@keyframes tampon{0%{transform:rotate(-8deg) scale(2.2);opacity:0}60%{transform:rotate(-8deg) scale(.92);opacity:1}100%{transform:rotate(-8deg) scale(1)}}
+.confirmation h3{font-family:var(--font-display);font-weight:900;text-transform:uppercase;font-size:1.4rem;margin:0 0 10px}
+.confirmation p{color:var(--muted);max-width:44ch;margin:0 auto 22px}
+
+/* CTA flottant */
+.flottant{
+  position:fixed;left:22px;bottom:22px;z-index:70;
+  display:inline-flex;align-items:center;gap:10px;
+}
+@media (max-width:640px){.flottant{left:14px;bottom:14px}}
+
+/* toast */
+.toast{
+  position:fixed;bottom:24px;left:50%;transform:translate(-50%,120%);
+  z-index:110;
+  background:var(--ink);color:var(--paper);
+  border:3px solid var(--paper);
+  font-family:var(--font-mono);font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:12px 20px;
+  transition:transform .35s cubic-bezier(.2,1.2,.3,1);
+  box-shadow:0 8px 24px rgba(0,0,0,.35);
+}
+.toast.on{transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+
+
+<!-- ======================================================================
+     HEADER
+     ====================================================================== -->
+<header class="site-header">
+  <div class="bar">
+    <a class="logo" href="#accueil" aria-label="Qui Scribit, retour à l'accueil">
+      <span class="cassetin" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span>Qui Scribit<small>Imprimerie · Ivry-sur-Seine</small></span>
+    </a>
+    <button class="burger" id="burger" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav class="main-nav" id="nav" aria-label="Navigation principale">
+      <a href="#services">Services</a>
+      <a href="#savoir-faire">Savoir-faire</a>
+      <a href="#realisations">Réalisations</a>
+      <a href="#devis">Devis</a>
+      <a href="#avis">Avis</a>
+      <a href="#atelier">L'atelier</a>
+    </nav>
+    <button class="btn small cart-btn" id="ouvrir-panier" aria-label="Ouvrir le panier de devis">
+      Mon devis
+      <span class="cart-badge" id="badge" aria-live="polite">0</span>
+    </button>
+  </div>
+</header>
+
+<main id="accueil">
+
+  <!-- ====================================================================
+       HERO
+       ==================================================================== -->
+  <section class="hero" aria-label="Présentation">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">Depuis le plomb jusqu'au pixel</span>
+        <h1 class="display">Chaque idée mérite d'être <span class="imp">imprimée</span> avec caractère.</h1>
+        <p class="pitch">Qui Scribit est une imprimerie artisanale et créative installée à Ivry-sur-Seine.
+        Héritiers de la typographie au plomb, équipés des presses numériques et offset les plus précises,
+        nous donnons corps à vos cartes, affiches, packagings et éditions — du premier calage à la dernière feuille.</p>
+        <div class="cta-row">
+          <a class="btn" href="#devis">Demander un devis</a>
+          <a class="btn ghost" href="#realisations">Voir nos réalisations</a>
+        </div>
+        <div class="hero-facts fx">
+          <div class="fact"><b>4,3/5</b><span>28 avis Google</span></div>
+          <div class="fact"><b>24–72&nbsp;h</b><span>Délais express</span></div>
+          <div class="fact"><b>1 → 100&nbsp;000</b><span>Exemplaires</span></div>
+          <div class="fact"><b>Ivry</b><span>Atelier ouvert</span></div>
+        </div>
+      </div>
+      <div class="hero-stage" aria-hidden="true">
+        <canvas id="presse"></canvas>
+        <span class="plaque">Composition en cours — casse n°5</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <span class="track" id="marquee-track">
+      Impression numérique <em>●</em> Offset <em>▲</em> Cartes de visite <em>■</em> Affiches <em>●</em> Packaging <em>▲</em> Grand format <em>■</em> Dorure à chaud <em>●</em> Gaufrage <em>▲</em> Vernis sélectif <em>■</em>&nbsp;
+    </span>
+  </div>
+
+  <!-- ====================================================================
+       SERVICES
+       ==================================================================== -->
+  <section id="services">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Nos presses tournent pour vous</span>
+        <h2 class="display split-reveal">Services d'impression</h2>
+        <p class="lede">Sept familles de produits, une même exigence : un rendu net, des couleurs justes,
+        des papiers choisis. Ajoutez ce qu'il vous faut à votre devis, on chiffre sous 24&nbsp;h ouvrées.</p>
+      </div>
+      <div class="services-grid" id="services-grid"><!-- cartes générées en JS --></div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       SAVOIR-FAIRE
+       ==================================================================== -->
+  <section id="savoir-faire" class="savoir">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow" data-forme="cercle">L'encre dans les veines</span>
+        <h2 class="display split-reveal">Notre savoir-faire</h2>
+        <p class="lede">« Qui scribit, bis legit » — qui écrit, lit deux fois. Notre nom est un rappel :
+        imprimer, c'est relire, régler, recommencer jusqu'à ce que la feuille soit parfaite.</p>
+      </div>
+      <div class="savoir-cols">
+        <div class="timeline" id="timeline">
+          <div class="tl-step fx">
+            <span class="annee">01 · Le conseil</span>
+            <h3>On écoute avant d'encrer</h3>
+            <p>Papier, format, façonnage, budget : chaque projet commence par une vraie conversation à l'atelier
+            ou au téléphone. Vous repartez avec une recommandation, pas un catalogue.</p>
+          </div>
+          <div class="tl-step fx">
+            <span class="annee">02 · La prépresse</span>
+            <h3>Des fichiers au cordeau</h3>
+            <p>Vérification des fonds perdus, des profils colorimétriques et des surimpressions.
+            Nous corrigeons ce qui doit l'être et vous envoyons un BAT clair avant toute impression.</p>
+          </div>
+          <div class="tl-step fx">
+            <span class="annee">03 · L'impression</span>
+            <h3>Numérique ou offset, au choix du projet</h3>
+            <p>Petites séries brillantes en numérique, grands tirages économiques en offset.
+            Le calage est fait à l'œil et au densitomètre — les deux comptent.</p>
+          </div>
+          <div class="tl-step fx">
+            <span class="annee">04 · Le façonnage</span>
+            <h3>La main finit ce que la machine commence</h3>
+            <p>Découpe, rainage, pliage, dorure à chaud, gaufrage : les finitions qui font qu'on garde
+            une carte au lieu de la jeter. C'est notre partie préférée.</p>
+          </div>
+          <div class="tl-step fx">
+            <span class="annee">05 · La livraison</span>
+            <h3>À l'heure, à Ivry ou ailleurs</h3>
+            <p>Retrait à l'atelier, coursier en Île-de-France ou expédition partout en France.
+            Les délais annoncés sont des délais tenus.</p>
+          </div>
+        </div>
+        <aside class="savoir-manifeste fx">
+          <p class="grand">La précision est une politesse faite au lecteur.</p>
+          <p>Notre atelier conserve une casse de caractères en plomb, non par nostalgie,
+          mais parce qu'elle nous rappelle chaque jour ce qu'exige une belle page :
+          de la rigueur, du rythme et un peu d'audace. Ce sont les trois choses
+          que nous mettons dans chaque tirage, du flyer A6 à la bâche de 12 mètres.</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       PORTFOLIO
+       ==================================================================== -->
+  <section id="realisations">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow" data-forme="triangle">Sorti de nos presses</span>
+        <h2 class="display split-reveal">Réalisations</h2>
+        <p class="lede">Un aperçu de ce qui sèche en ce moment sur les étagères de l'atelier.</p>
+      </div>
+      <div class="filtres" role="group" aria-label="Filtrer les réalisations">
+        <button class="filtre" data-filtre="tous" aria-pressed="true">Tout</button>
+        <button class="filtre" data-filtre="affiche" aria-pressed="false">Affiches</button>
+        <button class="filtre" data-filtre="carte" aria-pressed="false">Cartes &amp; papeterie</button>
+        <button class="filtre" data-filtre="packaging" aria-pressed="false">Packaging</button>
+        <button class="filtre" data-filtre="edition" aria-pressed="false">Édition</button>
+      </div>
+      <div class="pf-grid" id="pf-grid"><!-- généré en JS --></div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       CONFIGURATEUR / DEVIS
+       ==================================================================== -->
+  <section id="devis" class="config">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Composez, on imprime</span>
+        <h2 class="display split-reveal">Devis rapide</h2>
+        <p class="lede">Choisissez un produit, réglez vos options, ajoutez-le au devis.
+        Tout reste modifiable dans le panier, puis nous recevons votre demande par e-mail —
+        réponse chiffrée sous 24&nbsp;h ouvrées.</p>
+      </div>
+      <div class="config-box fx" role="form" aria-label="Configurateur de produit">
+        <div class="champ">
+          <label for="cfg-produit">Produit</label>
+          <select id="cfg-produit"></select>
+        </div>
+        <div class="champ">
+          <label for="cfg-quantite">Quantité</label>
+          <input id="cfg-quantite" type="number" min="1" step="1" value="250" inputmode="numeric">
+        </div>
+        <div class="champ">
+          <label for="cfg-format">Format</label>
+          <select id="cfg-format"></select>
+        </div>
+        <div class="champ">
+          <label for="cfg-papier">Papier</label>
+          <select id="cfg-papier"></select>
+        </div>
+        <div class="champ">
+          <label for="cfg-finition">Finition</label>
+          <select id="cfg-finition"></select>
+        </div>
+        <div class="action">
+          <button class="btn" id="cfg-ajouter" type="button">Ajouter au devis</button>
+        </div>
+      </div>
+      <p class="config-note">Sans engagement · Les prix dépendent des quantités et des papiers en stock — d'où le devis humain plutôt qu'un tarif automatique.</p>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       AVIS
+       ==================================================================== -->
+  <section id="avis">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow" data-forme="cercle">Ils ont testé nos presses</span>
+        <h2 class="display split-reveal">Avis clients</h2>
+      </div>
+      <div class="avis-resume fx">
+        <span class="note">4,3</span>
+        <div>
+          <div class="etoiles" id="etoiles" aria-label="Note de 4,3 sur 5"></div>
+          <p class="detail">28 avis Google · Imprimerie à Ivry-sur-Seine</p>
+        </div>
+        <a class="btn ghost small" style="margin-left:auto"
+           href="https://www.google.com/maps/search/Qui+Scribit+5+Rue+Pierre+Galais+94200+Ivry-sur-Seine"
+           target="_blank" rel="noopener noreferrer">Lire les avis sur Google</a>
+      </div>
+      <div class="avis-grid">
+        <article class="avis-card fx fx-d1">
+          <div class="qui">
+            <span class="pastille" style="background:var(--jaune);color:#131210">M</span>
+            <div><b>Marion D.</b><span>★★★★★ · il y a 2 mois</span></div>
+          </div>
+          <p>Cartes de visite avec dorure impeccables, conseils très pro sur le choix du papier.
+          Délai tenu à la journée près. Je reviendrai pour mes faire-part.</p>
+        </article>
+        <article class="avis-card fx fx-d2">
+          <div class="qui">
+            <span class="pastille" style="background:var(--bleu);color:#F5F1E8">K</span>
+            <div><b>Karim B.</b><span>★★★★★ · il y a 4 mois</span></div>
+          </div>
+          <p>200 affiches A2 pour notre festival, couleurs éclatantes et prix honnête.
+          L'équipe a même corrigé un fichier mal préparé sans supplément.</p>
+        </article>
+        <article class="avis-card fx fx-d3">
+          <div class="qui">
+            <span class="pastille" style="background:var(--rouge);color:#F5F1E8">S</span>
+            <div><b>Sophie L.</b><span>★★★★ · il y a 6 mois</span></div>
+          </div>
+          <p>Très bon rapport qualité-prix pour nos brochures. Petit délai supplémentaire
+          en période de fêtes, mais communication claire et résultat soigné.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       LOCALISATION
+       ==================================================================== -->
+  <section id="atelier">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow" data-forme="triangle">Poussez la porte</span>
+        <h2 class="display split-reveal">L'atelier</h2>
+        <p class="lede">L'odeur de l'encre fraîche est comprise dans la visite. Passez avec vos fichiers,
+        vos idées ou juste votre curiosité.</p>
+      </div>
+      <div class="loc-cols">
+        <div class="loc-infos fx">
+          <div>
+            <h3>Adresse</h3>
+            <address>Qui Scribit Imprimerie<br>5 Rue Pierre Galais<br>94200 Ivry-sur-Seine</address>
+          </div>
+          <div>
+            <h3>Téléphone</h3>
+            <p><a class="tel" href="tel:+33149606885">01 49 60 68 85</a></p>
+          </div>
+          <div>
+            <h3>Horaires <span class="badge-ouvert" id="badge-ouvert">Ouvert · ferme à 19h30</span></h3>
+            <table class="horaires" id="table-horaires">
+              <tbody>
+                <tr data-jour="1"><td>Lundi</td><td>9h00 – 19h30</td></tr>
+                <tr data-jour="2"><td>Mardi</td><td>9h00 – 19h30</td></tr>
+                <tr data-jour="3"><td>Mercredi</td><td>9h00 – 19h30</td></tr>
+                <tr data-jour="4"><td>Jeudi</td><td>9h00 – 19h30</td></tr>
+                <tr data-jour="5"><td>Vendredi</td><td>9h00 – 19h30</td></tr>
+                <tr data-jour="6"><td>Samedi</td><td>10h00 – 19h30</td></tr>
+                <tr data-jour="0"><td>Dimanche</td><td>Fermé</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <a class="btn bleu small" href="https://www.google.com/maps/dir/?api=1&destination=5+Rue+Pierre+Galais+94200+Ivry-sur-Seine"
+               target="_blank" rel="noopener noreferrer">Calculer mon itinéraire</a>
+          </div>
+        </div>
+        <div class="plan fx fx-d1" role="img" aria-label="Plan stylisé du quartier : l'atelier Qui Scribit se trouve rue Pierre Galais, à Ivry-sur-Seine, près de la Seine">
+          <svg viewBox="0 0 600 480" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+              <pattern id="hachures" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                <rect width="8" height="8" fill="var(--paper-2)"/>
+                <line x1="0" y1="0" x2="0" y2="8" stroke="var(--paper-3)" stroke-width="3"/>
+              </pattern>
+            </defs>
+            <rect width="600" height="480" fill="url(#hachures)"/>
+            <!-- La Seine -->
+            <path d="M -20 60 C 140 30, 300 110, 460 70 S 640 90, 640 90 L 640 -20 L -20 -20 Z"
+                  fill="var(--bleu)" opacity=".85"/>
+            <text x="330" y="52" font-family="var(--font-mono)" font-size="13" letter-spacing="4" fill="var(--paper)">LA SEINE</text>
+            <!-- rues -->
+            <g stroke="var(--ligne)" stroke-width="10" opacity=".92">
+              <line x1="0" y1="180" x2="600" y2="150"/>
+              <line x1="0" y1="330" x2="600" y2="360"/>
+              <line x1="140" y1="90" x2="180" y2="480"/>
+              <line x1="420" y1="80" x2="380" y2="480"/>
+            </g>
+            <g stroke="var(--ligne)" stroke-width="4" opacity=".5">
+              <line x1="0" y1="255" x2="600" y2="250"/>
+              <line x1="290" y1="100" x2="280" y2="480"/>
+            </g>
+            <!-- blocs bâtis -->
+            <g fill="var(--paper-3)" stroke="var(--ligne)" stroke-width="3">
+              <rect x="200" y="195" width="60" height="42"/>
+              <rect x="320" y="190" width="46" height="46"/>
+              <rect x="205" y="275" width="52" height="40"/>
+              <rect x="440" y="200" width="70" height="36"/>
+              <rect x="60"  y="210" width="52" height="34"/>
+              <rect x="450" y="280" width="56" height="40"/>
+              <rect x="60"  y="380" width="64" height="46"/>
+              <rect x="320" y="390" width="72" height="42"/>
+            </g>
+            <!-- rue Pierre Galais -->
+            <text x="196" y="172" font-family="var(--font-mono)" font-size="12" letter-spacing="2" fill="var(--ink)" transform="rotate(-2.8 196 172)">RUE PIERRE GALAIS</text>
+            <text x="30" y="322" font-family="var(--font-mono)" font-size="11" letter-spacing="2" fill="var(--muted)" transform="rotate(2.8 30 322)">AV. DE VERDUN</text>
+            <!-- marqueur atelier -->
+            <g id="marqueur">
+              <circle cx="300" cy="163" r="34" fill="var(--rouge)" stroke="var(--ligne)" stroke-width="4">
+                <animate attributeName="r" values="32;36;32" dur="2.4s" repeatCount="indefinite"/>
+              </circle>
+              <path d="M 300 214 L 283 176 L 317 176 Z" fill="var(--rouge)" stroke="var(--ligne)" stroke-width="4" stroke-linejoin="round"/>
+              <text x="300" y="169" text-anchor="middle" font-family="var(--font-display)" font-weight="900" font-size="17" fill="#F5F1E8">QS</text>
+            </g>
+            <!-- rose des vents minimaliste -->
+            <g transform="translate(545,430)">
+              <circle r="26" fill="var(--paper)" stroke="var(--ligne)" stroke-width="3"/>
+              <path d="M 0 -18 L 6 6 L 0 1 L -6 6 Z" fill="var(--rouge)"/>
+              <text y="-32" text-anchor="middle" font-family="var(--font-mono)" font-size="12" fill="var(--ink)">N</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ======================================================================
+     FOOTER
+     ====================================================================== -->
+<footer class="site-footer" id="contact">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <p class="marque">Qui <i>Scribit</i></p>
+        <p>Imprimerie artisanale et créative. Qui scribit, bis legit :
+        qui écrit, lit deux fois — et nous, on imprime trois fois mieux.</p>
+      </div>
+      <div>
+        <h4>Plan du site</h4>
+        <ul>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#savoir-faire">Savoir-faire</a></li>
+          <li><a href="#realisations">Réalisations</a></li>
+          <li><a href="#devis">Devis rapide</a></li>
+          <li><a href="#atelier">L'atelier</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:+33149606885">01 49 60 68 85</a></li>
+          <li><a href="mailto:contact@quiscribit.fr">contact@quiscribit.fr</a></li>
+          <li>5 Rue Pierre Galais<br>94200 Ivry-sur-Seine</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Suivez l'atelier</h4>
+        <ul>
+          <li><a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+          <li><a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+          <li><a href="https://www.behance.net" target="_blank" rel="noopener noreferrer">Behance</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="bas">
+      <span>© 2026 Qui Scribit Imprimerie — Tous droits réservés</span>
+      <span>Mentions légales · CGV · Confidentialité</span>
+      <span>Composé &amp; imprimé à Ivry-sur-Seine</span>
+    </div>
+  </div>
+</footer>
+
+<!-- CTA flottant -->
+<div class="flottant">
+  <a class="btn jaune small" href="#devis">✳ Devis rapide</a>
+</div>
+
+<!-- ======================================================================
+     PANIER (drawer)
+     ====================================================================== -->
+<div class="voile" id="voile"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-titre" aria-hidden="true">
+  <header>
+    <h2 id="drawer-titre">Mon devis</h2>
+    <button class="fermer" id="fermer-panier" aria-label="Fermer le panier">✕</button>
+  </header>
+  <div class="corps" id="panier-corps"><!-- lignes générées en JS --></div>
+  <footer>
+    <span class="compte" id="panier-compte">0 article</span>
+    <button class="btn" id="envoyer-devis">Envoyer ma demande de devis</button>
+  </footer>
+</aside>
+
+<!-- ======================================================================
+     MODALE DEVIS
+     ====================================================================== -->
+<div class="modale" id="modale" role="dialog" aria-modal="true" aria-labelledby="modale-titre">
+  <div class="boite">
+    <header>
+      <h2 id="modale-titre">Votre demande de devis</h2>
+      <button class="fermer" id="fermer-modale" aria-label="Fermer">✕</button>
+    </header>
+    <form id="form-devis" novalidate>
+      <div class="champ">
+        <label for="f-nom">Nom / société *</label>
+        <input id="f-nom" name="nom" autocomplete="name" required>
+        <span class="erreur" data-pour="f-nom"></span>
+      </div>
+      <div class="champ">
+        <label for="f-email">E-mail *</label>
+        <input id="f-email" name="email" type="email" autocomplete="email" required>
+        <span class="erreur" data-pour="f-email"></span>
+      </div>
+      <div class="champ">
+        <label for="f-tel">Téléphone *</label>
+        <input id="f-tel" name="tel" type="tel" autocomplete="tel" required>
+        <span class="erreur" data-pour="f-tel"></span>
+      </div>
+      <div class="champ">
+        <label for="f-delai">Délai souhaité</label>
+        <input id="f-delai" name="delai" placeholder="Ex. : avant le 20 juillet">
+        <span class="erreur"></span>
+      </div>
+      <div class="champ large">
+        <label for="f-message">Message complémentaire</label>
+        <textarea id="f-message" name="message" placeholder="Précisions, fichiers à venir, contraintes…"></textarea>
+      </div>
+      <div class="champ large">
+        <label>Récapitulatif envoyé à l'imprimerie</label>
+        <div class="recap" id="recap" aria-live="polite"></div>
+      </div>
+      <div class="pied">
+        <button class="btn" type="submit">Envoyer la demande</button>
+        <button class="btn ghost small" type="button" id="copier-recap">Copier le récapitulatif</button>
+      </div>
+    </form>
+    <div class="confirmation" id="confirmation">
+      <div class="sceau">Bon à<br>tirer</div>
+      <h3>Demande envoyée !</h3>
+      <p id="confirmation-texte">Votre demande de devis est partie vers <b>contact@quiscribit.fr</b>.
+      Une confirmation vous est adressée par e-mail. Nous vous répondons sous 24&nbsp;h ouvrées.</p>
+      <button class="btn jaune" id="fermer-confirmation" type="button">Parfait, merci</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ==========================================================================
+   QUI SCRIBIT — logique du site
+   ========================================================================== */
+"use strict";
+
+/* ---------- données catalogue ---------- */
+const FORMATS_STD = ["A6 (105×148 mm)","A5 (148×210 mm)","A4 (210×297 mm)","A3 (297×420 mm)","Format sur mesure"];
+const PAPIERS_STD = ["Couché mat 135 g","Couché brillant 170 g","Couché mat 350 g","Offset recyclé 120 g","Création texturé 300 g"];
+const FINITIONS_STD = ["Sans finition","Pelliculage mat","Pelliculage brillant","Pelliculage soft touch","Vernis sélectif","Dorure à chaud","Gaufrage / embossage"];
+
+const PRODUITS = [
+  {
+    id:"numerique", nom:"Impression numérique", forme:"cercle", couleur:"var(--rouge)",
+    desc:"Petites et moyennes séries en délai express, qualité constante dès le premier exemplaire. Idéal pour les tirages de 1 à 2 000 ex.",
+    specs:"Dès 1 ex · 24–48 h · Quadri recto/verso",
+    formats:FORMATS_STD, papiers:PAPIERS_STD, finitions:FINITIONS_STD, qte:250
+  },
+  {
+    id:"offset", nom:"Impression offset", forme:"carre", couleur:"var(--bleu)",
+    desc:"Le choix des grands tirages : rendu profond, tons directs Pantone, coût unitaire imbattable au-delà de 2 000 exemplaires.",
+    specs:"Dès 1 000 ex · Pantone & quadri · BAT calé machine",
+    formats:FORMATS_STD, papiers:PAPIERS_STD, finitions:FINITIONS_STD, qte:2000
+  },
+  {
+    id:"cartes", nom:"Cartes de visite", forme:"cercle", couleur:"var(--jaune)",
+    desc:"La poignée de main en papier. Papiers épais, dorure, gaufrage : la carte qu'on garde entre deux doigts un peu plus longtemps.",
+    specs:"85×55 mm · 300–600 g · Finitions premium",
+    formats:["85×55 mm (standard)","85×55 mm coins arrondis","Format carré 65×65 mm","Format sur mesure"],
+    papiers:["Couché mat 350 g","Création texturé 350 g","Papier coton 600 g","Kraft 380 g"],
+    finitions:FINITIONS_STD, qte:250
+  },
+  {
+    id:"flyers", nom:"Flyers & dépliants", forme:"triangle", couleur:"var(--rouge)",
+    desc:"Distribuer, annoncer, inviter. Du flyer A6 percutant au dépliant 3 volets rainé-plié, prêts à partir en tournée.",
+    specs:"A6 → A4 · Pli roulé, accordéon, fenêtre",
+    formats:[...FORMATS_STD,"A4 plié en 3 volets","A3 plié en 2"],
+    papiers:PAPIERS_STD, finitions:FINITIONS_STD, qte:1000
+  },
+  {
+    id:"affiches", nom:"Affiches", forme:"carre", couleur:"var(--jaune)",
+    desc:"Du A3 de vitrine au 120×176 pour l'abribus. Encres résistantes, couleurs qui tiennent la rue et le regard.",
+    specs:"A3 → 120×176 cm · Papier affiche ou dos bleu",
+    formats:["A3 (297×420 mm)","A2 (420×594 mm)","A1 (594×841 mm)","A0 (841×1189 mm)","120×176 cm (abribus)"],
+    papiers:["Papier affiche 135 g","Couché satin 170 g","Dos bleu 120 g","Papier création 250 g"],
+    finitions:["Sans finition","Pelliculage mat","Pelliculage brillant"], qte:50
+  },
+  {
+    id:"packaging", nom:"Packaging", forme:"triangle", couleur:"var(--bleu)",
+    desc:"Boîtes, étuis, étiquettes et sacs : la première chose que vos clients touchent. Découpe sur mesure et maquette blanche avant série.",
+    specs:"Découpe laser · Maquette 3D · Petites séries OK",
+    formats:["Étui sur mesure","Boîte à rabat","Étiquettes (planche)","Sac papier"],
+    papiers:["Carton compact 350 g","Micro-cannelure","Kraft brun 300 g","Carte couchée 400 g"],
+    finitions:FINITIONS_STD, qte:500
+  },
+  {
+    id:"grand-format", nom:"Grand format", forme:"cercle", couleur:"var(--rouge)",
+    desc:"Bâches, kakémonos, adhésifs de vitrine, signalétique d'exposition. Impression UV jusqu'à 3,20 m de laize, œillets posés à l'atelier.",
+    specs:"Jusqu'à 3,20 m · Intérieur/extérieur · Pose possible",
+    formats:["Kakémono 85×200 cm","Bâche sur mesure","Adhésif vitrine","Panneau rigide Dibond"],
+    papiers:["Bâche 510 g M1","Vinyle adhésif","Textile tendu","Dibond 3 mm"],
+    finitions:["Sans finition","Œillets","Fourreaux","Découpe à la forme"], qte:1
+  }
+];
+
+const PORTFOLIO = [
+  {t:"Festival Rive Encre", cat:"affiche", label:"Affiche A1 · sérigraphie 3 tons"},
+  {t:"Maison Palissandre", cat:"carte", label:"Carte de visite · dorure or"},
+  {t:"Savonnerie du 94", cat:"packaging", label:"Étui carton · kraft + noir"},
+  {t:"Revue Contreforme", cat:"edition", label:"Revue 96 p · dos carré collé"},
+  {t:"Ballet d'Ivry", cat:"affiche", label:"Affiche A2 · offset quadri"},
+  {t:"Café Linotype", cat:"carte", label:"Menu & cartes · gaufrage"},
+  {t:"Brasserie Galais", cat:"packaging", label:"Étiquettes bière · vernis sélectif"},
+  {t:"Atlas des Presses", cat:"edition", label:"Beau livre · couture apparente"}
+];
+
+/* ---------- helpers ---------- */
+const $ = (s,ctx=document)=>ctx.querySelector(s);
+const $$ = (s,ctx=document)=>[...ctx.querySelectorAll(s)];
+const echap = s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function toast(msg){
+  const t = $("#toast");
+  t.textContent = msg;
+  t.classList.add("on");
+  clearTimeout(toast._h);
+  toast._h = setTimeout(()=>t.classList.remove("on"),2600);
+}
+
+/* ---------- stockage panier (localStorage + repli mémoire) ---------- */
+const stock = (()=> {
+  let mem = null;
+  return {
+    lire(){
+      try{ return JSON.parse(localStorage.getItem("qs-devis")||"null") ?? mem ?? []; }
+      catch(e){ return mem ?? []; }
+    },
+    ecrire(v){
+      mem = v;
+      try{ localStorage.setItem("qs-devis",JSON.stringify(v)); }catch(e){/* mode privé : repli mémoire */}
+    }
+  };
+})();
+
+/* ---------- état ---------- */
+let panier = stock.lire();
+let uid = panier.reduce((m,l)=>Math.max(m,l.uid||0),0);
+
+/* ==========================================================================
+   RENDU — SERVICES
+   ========================================================================== */
+function glypheSVG(forme,couleur){
+  if(forme==="cercle") return `<svg viewBox="0 0 40 40" width="34" height="34" aria-hidden="true"><circle cx="20" cy="20" r="15" fill="${couleur}" stroke="var(--ligne)" stroke-width="3"/></svg>`;
+  if(forme==="triangle") return `<svg viewBox="0 0 40 40" width="34" height="34" aria-hidden="true"><path d="M20 5 L36 34 L4 34 Z" fill="${couleur}" stroke="var(--ligne)" stroke-width="3" stroke-linejoin="round"/></svg>`;
+  return `<svg viewBox="0 0 40 40" width="34" height="34" aria-hidden="true"><rect x="6" y="6" width="28" height="28" fill="${couleur}" stroke="var(--ligne)" stroke-width="3"/></svg>`;
+}
+
+function rendreServices(){
+  $("#services-grid").innerHTML = PRODUITS.map((p,i)=>`
+    <article class="service-card fx fx-d${(i%3)+1}" data-tilt>
+      <span class="glyphe">${glypheSVG(p.forme,p.couleur)}</span>
+      <h3>${echap(p.nom)}</h3>
+      <p>${echap(p.desc)}</p>
+      <span class="specs">${echap(p.specs)}</span>
+      <button class="btn small" data-ajout="${p.id}">Ajouter au devis</button>
+    </article>
+  `).join("");
+}
+
+/* ==========================================================================
+   RENDU — PORTFOLIO (compositions Bauhaus génératives en SVG)
+   ========================================================================== */
+function posterSVG(seed){
+  // petite composition géométrique déterministe par index
+  const C = ["var(--rouge)","var(--jaune)","var(--bleu)"];
+  const r = n => { seed = (seed*9301+49297)%233280; return (seed/233280)*n; };
+  const fonds = ["var(--paper)","var(--paper-2)","var(--ink)"];
+  const fond = fonds[Math.floor(r(3))];
+  const encre = fond==="var(--ink)" ? "var(--paper)" : "var(--ligne)";
+  let formes = "";
+  for(let i=0;i<5;i++){
+    const c = C[Math.floor(r(3))], x = 20+r(160), y = 30+r(190), s = 26+r(70);
+    const k = Math.floor(r(3));
+    if(k===0) formes += `<circle cx="${x}" cy="${y}" r="${s/2}" fill="${c}" stroke="${encre}" stroke-width="4"/>`;
+    else if(k===1) formes += `<rect x="${x-s/2}" y="${y-s/2}" width="${s}" height="${s}" fill="${c}" stroke="${encre}" stroke-width="4" transform="rotate(${Math.floor(r(40))-20} ${x} ${y})"/>`;
+    else formes += `<path d="M ${x} ${y-s/2} L ${x+s/2} ${y+s/2} L ${x-s/2} ${y+s/2} Z" fill="${c}" stroke="${encre}" stroke-width="4" stroke-linejoin="round"/>`;
+  }
+  const diag = r(1)>.5 ? `<line x1="0" y1="${40+r(200)}" x2="220" y2="${r(260)}" stroke="${encre}" stroke-width="6"/>` : "";
+  return `<svg viewBox="0 0 220 275" preserveAspectRatio="xMidYMid slice" role="img" aria-hidden="true">
+    <rect width="220" height="275" fill="${fond}"/>
+    ${diag}${formes}
+    <rect x="14" y="230" width="${60+r(90)}" height="10" fill="${encre}"/>
+    <rect x="14" y="248" width="${30+r(60)}" height="6" fill="${encre}" opacity=".6"/>
+  </svg>`;
+}
+
+function rendrePortfolio(){
+  $("#pf-grid").innerHTML = PORTFOLIO.map((it,i)=>`
+    <figure class="pf-item fx fx-d${(i%3)+1}" data-cat="${it.cat}" data-tilt>
+      <div class="visuel">${posterSVG(i*7+13)}</div>
+      <figcaption><b>${echap(it.t)}</b><span>${echap(it.label)}</span></figcaption>
+    </figure>
+  `).join("");
+}
+
+function initFiltres(){
+  $$(".filtre").forEach(b=>{
+    b.addEventListener("click",()=>{
+      $$(".filtre").forEach(x=>x.setAttribute("aria-pressed", x===b ? "true":"false"));
+      const f = b.dataset.filtre;
+      $$(".pf-item").forEach(el=>{
+        el.classList.toggle("masque", f!=="tous" && el.dataset.cat!==f);
+      });
+    });
+  });
+}
+
+/* ==========================================================================
+   ÉTOILES (4,3 / 5)
+   ========================================================================== */
+function rendreEtoiles(){
+  const cont = $("#etoiles");
+  let html = "";
+  for(let i=0;i<5;i++){
+    const remplissage = Math.max(0,Math.min(1,4.3-i)); // 1,1,1,1,.3
+    html += `<svg viewBox="0 0 24 24" aria-hidden="true">
+      <defs><clipPath id="clip-et-${i}"><rect x="0" y="0" width="${24*remplissage}" height="24"/></clipPath></defs>
+      <path d="M12 2 L14.9 8.6 L22 9.3 L16.7 14 L18.2 21 L12 17.3 L5.8 21 L7.3 14 L2 9.3 L9.1 8.6 Z"
+            fill="var(--paper-3)" stroke="var(--ligne)" stroke-width="1.4"/>
+      <path d="M12 2 L14.9 8.6 L22 9.3 L16.7 14 L18.2 21 L12 17.3 L5.8 21 L7.3 14 L2 9.3 L9.1 8.6 Z"
+            fill="var(--jaune)" clip-path="url(#clip-et-${i})" stroke="var(--ligne)" stroke-width="1.4"/>
+    </svg>`;
+  }
+  cont.innerHTML = html;
+}
+
+/* ==========================================================================
+   HORAIRES — surligner le jour courant
+   ========================================================================== */
+function initHoraires(){
+  const auj = new Date().getDay();
+  const ligne = $(`#table-horaires tr[data-jour="${auj}"]`);
+  if(ligne) ligne.classList.add("ouvert");
+  if(auj===0) $("#badge-ouvert").textContent = "Fermé aujourd'hui · réouvre lundi 9h";
+}
+
+/* ==========================================================================
+   PANIER — logique métier
+   ========================================================================== */
+function produit(id){ return PRODUITS.find(p=>p.id===id); }
+
+function sauver(){ stock.ecrire(panier); majBadge(); rendrePanier(); }
+
+function majBadge(anime){
+  const b = $("#badge");
+  const n = panier.length;
+  b.textContent = n;
+  $("#panier-compte").textContent = n<=1 ? `${n} article` : `${n} articles`;
+  $("#envoyer-devis").disabled = n===0;
+  if(anime){
+    b.classList.remove("pop");
+    void b.offsetWidth; // relance l'animation
+    b.classList.add("pop");
+  }
+}
+
+function ajouterAuPanier(id, options){
+  const p = produit(id);
+  if(!p) return;
+  panier.push({
+    uid:++uid,
+    id:p.id, nom:p.nom,
+    qte: options?.qte ?? p.qte,
+    format: options?.format ?? p.formats[0],
+    papier: options?.papier ?? p.papiers[0],
+    finition: options?.finition ?? p.finitions[0]
+  });
+  stock.ecrire(panier);
+  majBadge(true);
+  rendrePanier();
+  toast(`${p.nom} ajouté au devis`);
+}
+
+function rendrePanier(){
+  const corps = $("#panier-corps");
+  if(panier.length===0){
+    corps.innerHTML = `<div class="panier-vide">
+      <div class="glyphe-vide">■●▲</div>
+      Votre devis est vide pour l'instant.<br>Ajoutez des produits depuis la page — tout reste modifiable ici.
+    </div>`;
+    return;
+  }
+  corps.innerHTML = panier.map(l=>{
+    const p = produit(l.id);
+    const opt = (liste,val)=>liste.map(o=>`<option ${o===val?"selected":""}>${echap(o)}</option>`).join("");
+    return `<div class="ligne-devis" data-uid="${l.uid}">
+      <div class="titre">
+        <b>${echap(l.nom)}</b>
+        <span class="actions">
+          <button data-dupliquer="${l.uid}" title="Dupliquer cette ligne" aria-label="Dupliquer ${echap(l.nom)}">⧉</button>
+          <button data-supprimer="${l.uid}" title="Supprimer cette ligne" aria-label="Supprimer ${echap(l.nom)}">✕</button>
+        </span>
+      </div>
+      <div class="options">
+        <div class="champ"><label>Quantité</label>
+          <input type="number" min="1" step="1" value="${l.qte}" data-opt="qte"></div>
+        <div class="champ"><label>Format</label>
+          <select data-opt="format">${opt(p.formats,l.format)}</select></div>
+        <div class="champ"><label>Papier</label>
+          <select data-opt="papier">${opt(p.papiers,l.papier)}</select></div>
+        <div class="champ"><label>Finition</label>
+          <select data-opt="finition">${opt(p.finitions,l.finition)}</select></div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function initPanierEvents(){
+  // délégation : ajout depuis les cartes services
+  document.addEventListener("click",e=>{
+    const btnAjout = e.target.closest("[data-ajout]");
+    if(btnAjout){ ajouterAuPanier(btnAjout.dataset.ajout); }
+
+    const btnSup = e.target.closest("[data-supprimer]");
+    if(btnSup){
+      panier = panier.filter(l=>l.uid!==+btnSup.dataset.supprimer);
+      sauver(); toast("Ligne supprimée");
+    }
+    const btnDup = e.target.closest("[data-dupliquer]");
+    if(btnDup){
+      const src = panier.find(l=>l.uid===+btnDup.dataset.dupliquer);
+      if(src){ panier.push({...src,uid:++uid}); sauver(); majBadge(true); toast("Ligne dupliquée"); }
+    }
+  });
+  // édition des options dans le drawer
+  $("#panier-corps").addEventListener("change",e=>{
+    const champ = e.target.closest("[data-opt]");
+    if(!champ) return;
+    const ligneEl = champ.closest(".ligne-devis");
+    const l = panier.find(x=>x.uid===+ligneEl.dataset.uid);
+    if(!l) return;
+    const k = champ.dataset.opt;
+    l[k] = k==="qte" ? Math.max(1,parseInt(champ.value,10)||1) : champ.value;
+    stock.ecrire(panier); majBadge();
+  });
+}
+
+/* ---------- drawer ouverture/fermeture ---------- */
+function ouvrirDrawer(){
+  $("#drawer").classList.add("on");
+  $("#drawer").setAttribute("aria-hidden","false");
+  $("#voile").classList.add("on");
+  document.body.style.overflow = "hidden";
+}
+function fermerDrawer(){
+  $("#drawer").classList.remove("on");
+  $("#drawer").setAttribute("aria-hidden","true");
+  $("#voile").classList.remove("on");
+  document.body.style.overflow = "";
+}
+
+/* ==========================================================================
+   CONFIGURATEUR
+   ========================================================================== */
+function initConfigurateur(){
+  const selP = $("#cfg-produit");
+  selP.innerHTML = PRODUITS.map(p=>`<option value="${p.id}">${echap(p.nom)}</option>`).join("");
+  function majOptions(){
+    const p = produit(selP.value);
+    $("#cfg-format").innerHTML   = p.formats.map(f=>`<option>${echap(f)}</option>`).join("");
+    $("#cfg-papier").innerHTML   = p.papiers.map(f=>`<option>${echap(f)}</option>`).join("");
+    $("#cfg-finition").innerHTML = p.finitions.map(f=>`<option>${echap(f)}</option>`).join("");
+    $("#cfg-quantite").value = p.qte;
+  }
+  selP.addEventListener("change",majOptions);
+  majOptions();
+  $("#cfg-ajouter").addEventListener("click",()=>{
+    ajouterAuPanier(selP.value,{
+      qte:Math.max(1,parseInt($("#cfg-quantite").value,10)||1),
+      format:$("#cfg-format").value,
+      papier:$("#cfg-papier").value,
+      finition:$("#cfg-finition").value
+    });
+    ouvrirDrawer();
+  });
+}
+
+/* ==========================================================================
+   FORMULAIRE DE DEVIS + EMAIL
+   ========================================================================== */
+const EMAIL_IMPRIMERIE = "contact@quiscribit.fr";
+
+function recapTexte(donnees){
+  const d = new Date();
+  const date = d.toLocaleDateString("fr-FR",{day:"2-digit",month:"long",year:"numeric"}) +
+               " à " + d.toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
+  const lignes = panier.map(l=>
+    `- ${l.nom} : ${l.qte} ex, ${l.format}, ${l.papier}, ${l.finition}`
+  ).join("\n");
+  return [
+    "Objet : Nouvelle demande de devis - Qui Scribit",
+    "",
+    `Client : ${donnees.nom||"—"} | ${donnees.email||"—"} | ${donnees.tel||"—"}`,
+    donnees.delai ? `Délai souhaité : ${donnees.delai}` : null,
+    "",
+    "Détail de la demande :",
+    lignes || "- (panier vide)",
+    "",
+    `Message client : ${donnees.message||"—"}`,
+    "",
+    `Date : ${date}`
+  ].filter(x=>x!==null).join("\n");
+}
+
+function majRecap(){
+  const f = $("#form-devis");
+  $("#recap").textContent = recapTexte({
+    nom:f.nom.value.trim(), email:f.email.value.trim(),
+    tel:f.tel.value.trim(), delai:f.delai.value.trim(), message:f.message.value.trim()
+  });
+}
+
+function validerForm(){
+  const f = $("#form-devis");
+  let ok = true;
+  const regles = [
+    ["f-nom",  v=>v.length>=2, "Indiquez votre nom ou celui de votre société."],
+    ["f-email",v=>/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v), "Cette adresse e-mail semble incomplète."],
+    ["f-tel",  v=>v.replace(/\D/g,"").length>=9, "Un numéro à 10 chiffres nous permet de vous rappeler."]
+  ];
+  regles.forEach(([id,test,msg])=>{
+    const champ = document.getElementById(id);
+    const err = $(`.erreur[data-pour="${id}"]`);
+    const valide = test(champ.value.trim());
+    err.textContent = valide ? "" : msg;
+    if(!valide) ok = false;
+  });
+  return ok;
+}
+
+function initModale(){
+  const modale = $("#modale");
+  const form = $("#form-devis");
+
+  $("#envoyer-devis").addEventListener("click",()=>{
+    if(panier.length===0){ toast("Ajoutez d'abord un produit au devis"); return; }
+    fermerDrawer();
+    form.style.display = "";
+    $("#confirmation").classList.remove("on");
+    majRecap();
+    modale.classList.add("on");
+    document.body.style.overflow = "hidden";
+    setTimeout(()=>$("#f-nom").focus(),300);
+  });
+
+  const fermerModale = ()=>{
+    modale.classList.remove("on");
+    document.body.style.overflow = "";
+  };
+  $("#fermer-modale").addEventListener("click",fermerModale);
+  modale.addEventListener("click",e=>{ if(e.target===modale) fermerModale(); });
+
+  form.addEventListener("input",majRecap);
+
+  $("#copier-recap").addEventListener("click",async ()=>{
+    majRecap();
+    try{
+      await navigator.clipboard.writeText($("#recap").textContent);
+      toast("Récapitulatif copié");
+    }catch(e){
+      // repli : sélection manuelle
+      const r = document.createRange();
+      r.selectNodeContents($("#recap"));
+      const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+      toast("Sélectionnez et copiez le texte (Ctrl+C)");
+    }
+  });
+
+  form.addEventListener("submit",e=>{
+    e.preventDefault();
+    if(!validerForm()) return;
+    majRecap();
+    const corps = $("#recap").textContent;
+    // Envoi automatisé : ouverture du client mail pré-rempli vers l'imprimerie.
+    // (En production : remplacer par Formspree/EmailJS — voir commentaire en fin de fichier.)
+    const mailto = `mailto:${EMAIL_IMPRIMERIE}`
+      + `?subject=${encodeURIComponent("Nouvelle demande de devis - Qui Scribit")}`
+      + `&body=${encodeURIComponent(corps)}`;
+    const lien = document.createElement("a");
+    lien.href = mailto;
+    lien.click();
+    // Confirmation + vidage du panier
+    form.style.display = "none";
+    $("#confirmation").classList.add("on");
+    panier = [];
+    sauver();
+  });
+
+  $("#fermer-confirmation").addEventListener("click",fermerModale);
+}
+
+/* ==========================================================================
+   HERO — scène canvas « caractères de plomb »
+   Les lettres arrivent en miroir (comme du vrai plomb) puis se retournent
+   au moment où elles « s'impriment » sur la page.
+   ========================================================================== */
+function initPresse(){
+  const canvas = $("#presse");
+  const ctx = canvas.getContext("2d");
+  const reduire = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const MOTS = ["QUI","SCRIBIT"];
+  const ACCENTS = ["#D62828","#F4B400","#1D63A6"];
+  let lettres = [], t0 = null, largeur=0, hauteur=0, dpr=1;
+
+  function poserLettres(){
+    dpr = Math.min(2, window.devicePixelRatio||1);
+    const rect = canvas.parentElement.getBoundingClientRect();
+    largeur = rect.width; hauteur = rect.height;
+    canvas.width = largeur*dpr; canvas.height = hauteur*dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+
+    lettres = [];
+    const nMax = Math.max(...MOTS.map(m=>m.length));
+    const taille = Math.min(largeur/(nMax+1.6), hauteur/(MOTS.length*2.6));
+    const totalH = MOTS.length*taille*1.55;
+    let y0 = (hauteur-totalH)/2 + taille*.8;
+    let g = 0;
+    MOTS.forEach((mot,li)=>{
+      const w = mot.length*taille*1.12;
+      let x0 = (largeur-w)/2 + taille*.56;
+      [...mot].forEach((ch,ci)=>{
+        // position de départ pseudo-aléatoire mais déterministe
+        const h1 = Math.sin(g*127.1)*43758.5453, a1 = h1-Math.floor(h1);
+        const h2 = Math.sin(g*311.7)*12543.853, a2 = h2-Math.floor(h2);
+        lettres.push({
+          ch,
+          tx:x0+ci*taille*1.12, ty:y0+li*taille*1.55,
+          sx:largeur*a1, sy:-hauteur*.25 - a2*hauteur*.9,
+          rot:(a1-.5)*5,
+          delai:g*.09 + a2*.15,
+          taille,
+          accent:(g%4===3) ? ACCENTS[g%3] : null,
+          g:g++
+        });
+      });
+    });
+  }
+
+  function easeOut(t){ return 1-Math.pow(1-t,3.2); }
+
+  function dessiner(ts){
+    if(t0===null) t0=ts;
+    const t = (ts-t0)/1000;
+    ctx.clearRect(0,0,largeur,hauteur);
+
+    // formes géométriques d'ambiance en fond
+    const shapes=[[.16,.2,"#D62828",0],[.84,.16,"#F4B400",1],[.2,.86,"#1D63A6",2],[.86,.82,"#D62828",1]];
+    shapes.forEach(([fx,fy,c,k],i)=>{
+      const bob = reduire?0:Math.sin(t*.7+i*2)*6;
+      const s = Math.min(largeur,hauteur)*.09;
+      ctx.save();
+      ctx.translate(fx*largeur, fy*hauteur+bob);
+      ctx.globalAlpha=.9; ctx.fillStyle=c; ctx.strokeStyle="#F5F1E8"; ctx.lineWidth=3;
+      if(k===0){ ctx.beginPath(); ctx.arc(0,0,s/2,0,7); ctx.fill(); ctx.stroke(); }
+      else if(k===1){ ctx.rotate(Math.sin(t*.3+i)*.2); ctx.fillRect(-s/2,-s/2,s,s); ctx.strokeRect(-s/2,-s/2,s,s); }
+      else { ctx.beginPath(); ctx.moveTo(0,-s/2); ctx.lineTo(s/2,s/2); ctx.lineTo(-s/2,s/2); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+      ctx.restore();
+    });
+
+    let fini = true;
+    lettres.forEach(L=>{
+      const p = reduire ? 1 : Math.max(0,Math.min(1,(t-L.delai)/1.4));
+      if(p<1) fini=false;
+      const e = easeOut(p);
+      const x = L.sx+(L.tx-L.sx)*e;
+      const y = L.sy+(L.ty-L.sy)*e;
+      const rot = L.rot*(1-e);
+      const flot = (p>=1 && !reduire) ? Math.sin(t*1.1+L.g*.7)*2.5 : 0;
+      const s = L.taille;
+
+      ctx.save();
+      ctx.translate(x,y+flot);
+      ctx.rotate(rot);
+      // bloc de plomb
+      ctx.fillStyle = L.accent || "#2a2723";
+      ctx.strokeStyle = "#F5F1E8";
+      ctx.lineWidth = 2.5;
+      const b = s*1.02;
+      ctx.fillRect(-b/2,-b/2,b,b);
+      ctx.strokeRect(-b/2,-b/2,b,b);
+      // relief du bloc
+      ctx.fillStyle = "rgba(255,255,255,.12)";
+      ctx.fillRect(-b/2,-b/2,b,b*.12);
+      // la lettre : en miroir tant qu'elle vole, à l'endroit une fois posée
+      const miroir = p<.82 ? -1 : 1;
+      ctx.scale(miroir,1);
+      ctx.fillStyle = L.accent ? "#131210" : "#F5F1E8";
+      ctx.font = `900 ${s*.72}px "Futura","Avenir Next","Arial Black",Impact,sans-serif`;
+      ctx.textAlign="center"; ctx.textBaseline="middle";
+      ctx.fillText(L.ch,0,s*.04);
+      ctx.restore();
+    });
+
+    // tagline une fois composé
+    if(fini){
+      ctx.save();
+      ctx.globalAlpha = reduire?1:Math.max(0,Math.min(1,(t-2.2)));
+      ctx.fillStyle="#F5F1E8";
+      ctx.font = `400 ${Math.max(10,largeur*.024)}px ui-monospace,"Courier New",monospace`;
+      ctx.textAlign="center";
+      ctx.fillText("— B I S · L E G I T —", largeur/2, hauteur-Math.max(24,hauteur*.08));
+      ctx.restore();
+    }
+    if(!reduire || !fini) requestAnimationFrame(dessiner);
+  }
+
+  poserLettres();
+  requestAnimationFrame(dessiner);
+  let redim;
+  addEventListener("resize",()=>{
+    clearTimeout(redim);
+    redim = setTimeout(()=>{ poserLettres(); },150);
+  });
+}
+
+/* ==========================================================================
+   TILT 3D sur cartes (services + portfolio)
+   ========================================================================== */
+function initTilt(){
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if(matchMedia("(hover: none)").matches) return;
+  document.addEventListener("pointermove",e=>{
+    const el = e.target.closest("[data-tilt]");
+    $$("[data-tilt]").forEach(c=>{ if(c!==el) c.style.transform=""; });
+    if(!el) return;
+    // le tilt se fige au-dessus des zones cliquables : le bouton ne fuit pas sous le curseur
+    if(e.target.closest("button,a,select,input")) return;
+    const r = el.getBoundingClientRect();
+    const px = (e.clientX-r.left)/r.width - .5;
+    const py = (e.clientY-r.top)/r.height - .5;
+    el.style.transform = `perspective(800px) rotateY(${px*5}deg) rotateX(${-py*5}deg) translateY(-3px)`;
+  });
+  document.addEventListener("pointerleave",()=>{
+    $$("[data-tilt]").forEach(c=>c.style.transform="");
+  },true);
+}
+
+/* ==========================================================================
+   RÉVÉLATIONS AU SCROLL
+   ========================================================================== */
+function initReveals(){
+  // titres lettre par lettre
+  $$(".split-reveal").forEach(h=>{
+    const mots = h.textContent.trim().split(/\s+/);
+    h.textContent = "";
+    let i=0;
+    mots.forEach((mot,mi)=>{
+      const wd = document.createElement("span");
+      wd.className="wd";
+      [...mot].forEach(ch=>{
+        const sp = document.createElement("span");
+        sp.className="ltr";
+        sp.style.transitionDelay = `${i*0.028}s`;
+        sp.textContent = ch;
+        wd.appendChild(sp);
+        i++;
+      });
+      h.appendChild(wd);
+      if(mi<mots.length-1) h.appendChild(document.createTextNode(" "));
+    });
+  });
+  const io = new IntersectionObserver(entries=>{
+    entries.forEach(en=>{
+      if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); }
+    });
+  },{threshold:.18});
+  $$(".split-reveal,.fx").forEach(el=>io.observe(el));
+}
+
+/* ==========================================================================
+   NAVIGATION / DIVERS
+   ========================================================================== */
+function initNav(){
+  const burger = $("#burger"), nav = $("#nav");
+  burger.addEventListener("click",()=>{
+    const open = nav.classList.toggle("open");
+    burger.setAttribute("aria-expanded",open);
+  });
+  nav.addEventListener("click",e=>{
+    if(e.target.tagName==="A"){ nav.classList.remove("open"); burger.setAttribute("aria-expanded","false"); }
+  });
+  $("#ouvrir-panier").addEventListener("click",ouvrirDrawer);
+  $("#fermer-panier").addEventListener("click",fermerDrawer);
+  $("#voile").addEventListener("click",fermerDrawer);
+  document.addEventListener("keydown",e=>{
+    if(e.key==="Escape"){
+      fermerDrawer();
+      $("#modale").classList.remove("on");
+      document.body.style.overflow="";
+    }
+  });
+  // marquee : doubler le contenu pour la boucle infinie
+  const tr = $("#marquee-track");
+  tr.innerHTML += tr.innerHTML;
+}
+
+/* ==========================================================================
+   DÉMARRAGE
+   ========================================================================== */
+rendreServices();
+rendrePortfolio();
+rendreEtoiles();
+initFiltres();
+initHoraires();
+initPanierEvents();
+initConfigurateur();
+initModale();
+initNav();
+initTilt();
+initReveals();
+initPresse();
+rendrePanier();
+majBadge();
+
+/* --------------------------------------------------------------------------
+   NOTE PRODUCTION — envoi d'e-mail automatisé
+   Cette démo utilise mailto: (aucun backend requis). Pour un envoi serveur :
+   1. Créer un formulaire sur formspree.io → récupérer l'URL /f/xxxx
+   2. Remplacer le bloc mailto du submit par :
+        fetch("https://formspree.io/f/xxxx",{method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({email:donnees.email,message:corps})})
+   3. Configurer la réponse automatique client dans Formspree (onglet Autoresponse).
+   -------------------------------------------------------------------------- */
+</script>
+
+</body>
+</html>
