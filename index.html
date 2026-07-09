@@ -124,6 +124,14 @@
   .preview-head .lights i:nth-child(1){background:#ff5f57}
   .preview-head .lights i:nth-child(2){background:#febc2e}
   .preview-head .lights i:nth-child(3){background:#28c840}
+  .preview-head #fsBtn{
+    margin-left:auto; padding:3px 9px; border-radius:6px; color:var(--muted);
+    font-size:15px; line-height:1; border:1px solid transparent;
+    transition:color .15s, border-color .15s;
+  }
+  .preview-head #fsBtn:hover{color:var(--text); border-color:var(--border)}
+  #previewPane.plein{position:fixed; inset:0; z-index:60; background:var(--bg)}
+  #previewPane:fullscreen{background:var(--bg)}
   #previewBody{flex:1; position:relative; min-height:0; display:flex; flex-direction:column}
   #preview{flex:1; width:100%; border:none; background:#fff}
   [data-theme="dark"] #preview.chrome-dark{background:#0d1117}
@@ -206,6 +214,7 @@
     <div class="preview-head">
       <span class="lights"><i></i><i></i><i></i></span>
       <span id="previewTitle">Aperçu en direct</span>
+      <button id="fsBtn" title="Plein écran">⛶</button>
     </div>
     <div id="errBanner"></div>
     <div id="previewBody">
@@ -695,6 +704,45 @@ $("#downloadBtn").addEventListener("click", () => {
   const a = document.createElement("a");
   a.href = url; a.download = name; a.click();
   setTimeout(() => URL.revokeObjectURL(url), 2000);
+});
+
+/* ---------- Plein écran ---------- */
+const fsBtn = $("#fsBtn"), previewPane = $("#previewPane");
+function fsNatif(){ return document.fullscreenElement || document.webkitFullscreenElement || null; }
+function fsActif(){ return !!fsNatif() || previewPane.classList.contains("plein"); }
+function majFsBtn(){
+  fsBtn.textContent = fsActif() ? "✕" : "⛶";
+  fsBtn.title = fsActif() ? "Quitter le plein écran (Échap)" : "Plein écran";
+}
+fsBtn.addEventListener("click", () => {
+  if (fsActif()){
+    previewPane.classList.remove("plein");
+    if (fsNatif()){
+      if (document.exitFullscreen) document.exitFullscreen();
+      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+    }
+  } else {
+    previewPane.classList.add("plein");
+    // Plein écran natif quand l'appareil le permet, sinon la superposition suffit
+    if (previewPane.requestFullscreen) previewPane.requestFullscreen().catch(() => {});
+    else if (previewPane.webkitRequestFullscreen) previewPane.webkitRequestFullscreen();
+  }
+  majFsBtn();
+});
+["fullscreenchange", "webkitfullscreenchange"].forEach(ev =>
+  document.addEventListener(ev, () => {
+    if (!fsNatif()) previewPane.classList.remove("plein");
+    majFsBtn();
+  }));
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && fsActif()){
+    previewPane.classList.remove("plein");
+    if (fsNatif()){
+      if (document.exitFullscreen) document.exitFullscreen();
+      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+    }
+    majFsBtn();
+  }
 });
 
 /* ---------- Divers contrôles ---------- */
