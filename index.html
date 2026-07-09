@@ -176,6 +176,35 @@
     color:var(--err); border-bottom:1px solid var(--border); white-space:pre-wrap;
   }
 
+  /* ---------- Boîte de dialogue & toast ---------- */
+  #modalFond{
+    position:fixed; inset:0; z-index:80; background:rgba(0,0,0,.5);
+    display:none; align-items:center; justify-content:center; padding:20px;
+  }
+  #modalFond.open{display:flex}
+  #modal{
+    width:min(400px,94vw); background:var(--panel); border:1px solid var(--border);
+    border-radius:12px; box-shadow:var(--shadow); padding:20px 20px 16px;
+  }
+  #modal h3{font-size:15px; margin-bottom:10px}
+  #modal p{font-size:13.5px; color:var(--muted); margin-bottom:14px; line-height:1.5}
+  #modalInput{
+    width:100%; padding:9px 12px; margin-bottom:16px;
+    font-size:16px; color:var(--text); background:var(--bg);
+    border:1px solid var(--border); border-radius:8px; outline:none;
+  }
+  #modalInput:focus{border-color:var(--accent)}
+  .modal-actions{display:flex; justify-content:flex-end; gap:8px}
+  .btn.danger{background:var(--err); border-color:var(--err); color:#fff; font-weight:600}
+  .btn.danger:hover{filter:brightness(1.1); border-color:var(--err)}
+  #toast{
+    position:fixed; left:50%; bottom:34px; transform:translate(-50%,16px);
+    z-index:90; background:var(--panel); border:1px solid var(--border);
+    border-radius:10px; padding:10px 18px; font-size:13.5px; box-shadow:var(--shadow);
+    opacity:0; pointer-events:none; transition:opacity .25s, transform .25s;
+  }
+  #toast.show{opacity:1; transform:translate(-50%,0)}
+
   /* ---------- Projets (tiroir) ---------- */
   #projNom{
     font-size:12.5px; color:var(--muted); max-width:180px; overflow:hidden;
@@ -295,6 +324,19 @@
     </div>
   </div>
 </aside>
+
+<div id="modalFond">
+  <div id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitre">
+    <h3 id="modalTitre"></h3>
+    <p id="modalMsg"></p>
+    <input id="modalInput" type="text" autocomplete="off" spellcheck="false">
+    <div class="modal-actions">
+      <button class="btn" id="modalAnnule">Annuler</button>
+      <button class="btn primary" id="modalOk">OK</button>
+    </div>
+  </div>
+</div>
+<div id="toast" role="status"></div>
 
 <footer>
   <span class="status" id="statusOk"><span class="led"></span><span id="statusTxt">Prêt</span></span>
@@ -828,8 +870,13 @@ $("#themeBtn").addEventListener("click", () => {
   document.documentElement.dataset.theme = state.theme;
   save();
 });
-$("#resetBtn").addEventListener("click", () => {
-  if (!confirm("Restaurer les exemples par défaut dans ce projet ? Son code actuel sera perdu.")) return;
+$("#resetBtn").addEventListener("click", async () => {
+  const ok = await dialogue({
+    titre:"Restaurer les exemples",
+    message:"Restaurer les exemples par défaut dans ce projet ? Son code actuel sera perdu.",
+    okLabel:"Restaurer", danger:true,
+  });
+  if (!ok) return;
   state.docs = { ...EXAMPLES };
   chargeDansEditeurs();
   save(); run();
@@ -857,6 +904,48 @@ $("#resetBtn").addEventListener("click", () => {
     $("#preview").style.pointerEvents = "";
   });
 })();
+
+/* ---------- Boîte de dialogue intégrée ----------
+   Les prompt/confirm/alert natifs sont bloqués quand la page tourne
+   dans un cadre sécurisé (visionneuse d'artifacts) : tout passe ici. */
+const modalFond = $("#modalFond"), modalInput = $("#modalInput");
+let modalResolve = null;
+function dialogue(o){
+  return new Promise(res => {
+    modalResolve = res;
+    $("#modalTitre").textContent = o.titre || "";
+    $("#modalMsg").textContent = o.message || "";
+    $("#modalMsg").style.display = o.message ? "" : "none";
+    modalInput.style.display = o.champ ? "" : "none";
+    modalInput.value = o.valeur || "";
+    const ok = $("#modalOk");
+    ok.textContent = o.okLabel || "OK";
+    ok.classList.toggle("danger", !!o.danger);
+    modalFond.classList.add("open");
+    if (o.champ){ modalInput.focus(); modalInput.select(); }
+    else ok.focus();
+  });
+}
+function fermeModal(valeur){
+  modalFond.classList.remove("open");
+  const r = modalResolve;
+  modalResolve = null;
+  if (r) r(valeur);
+}
+$("#modalOk").addEventListener("click", () =>
+  fermeModal(modalInput.style.display === "none" ? true : modalInput.value));
+$("#modalAnnule").addEventListener("click", () => fermeModal(null));
+modalFond.addEventListener("click", e => { if (e.target === modalFond) fermeModal(null); });
+modalInput.addEventListener("keydown", e => { if (e.key === "Enter") $("#modalOk").click(); });
+
+let toastTimer = null;
+function toast(msg){
+  const t = $("#toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 2600);
+}
 
 /* ---------- Persistance & projets ---------- */
 const STORE = "polyglotte.v2", STORE_V1 = "polyglotte.v1";
@@ -924,8 +1013,8 @@ function ouvreProjet(id){
   if (id !== projetActif && projets[id]){ save(); activeProjet(id); }
   rendListe(); fermeDrawer();
 }
-function nouveauProjet(){
-  const nom = prompt("Nom du nouveau projet :", "Sans titre");
+async function nouveauProjet(){
+  const nom = await dialogue({ titre:"Nouveau projet", champ:true, valeur:"Sans titre", okLabel:"Créer" });
   if (nom === null) return;
   save();
   const id = uid();
@@ -933,14 +1022,19 @@ function nouveauProjet(){
   activeProjet(id);
   rendListe(); fermeDrawer();
 }
-function renommeProjet(id){
-  const nv = prompt("Nouveau nom :", projets[id].nom);
+async function renommeProjet(id){
+  const nv = await dialogue({ titre:"Renommer le projet", champ:true, valeur:projets[id].nom, okLabel:"Renommer" });
   if (nv === null) return;
   projets[id].nom = nv.trim() || projets[id].nom;
   majNomProjet(); rendListe(); save();
 }
-function supprimeProjet(id){
-  if (!confirm("Supprimer « " + projets[id].nom + " » ? Cette action est définitive.")) return;
+async function supprimeProjet(id){
+  const ok = await dialogue({
+    titre:"Supprimer le projet",
+    message:"Supprimer « " + projets[id].nom + " » ? Cette action est définitive.",
+    okLabel:"Supprimer", danger:true,
+  });
+  if (!ok) return;
   const etaitActif = id === projetActif;
   delete projets[id];
   if (etaitActif){
@@ -991,7 +1085,11 @@ $("#drawerClose").addEventListener("click", fermeDrawer);
 $("#drawerFond").addEventListener("click", fermeDrawer);
 $("#projNom").addEventListener("click", () => renommeProjet(projetActif));
 $("#projNouveau").addEventListener("click", nouveauProjet);
-document.addEventListener("keydown", e => { if (e.key === "Escape") fermeDrawer(); });
+document.addEventListener("keydown", e => {
+  if (e.key !== "Escape") return;
+  if (modalFond.classList.contains("open")) fermeModal(null);
+  else fermeDrawer();
+});
 
 /* ---------- Export / import des projets ---------- */
 $("#projExport").addEventListener("click", () => {
@@ -1020,8 +1118,8 @@ $("#projFile").addEventListener("change", e => {
         n++;
       }
       save(); rendListe();
-      alert(n ? n + " projet(s) importé(s)." : "Aucun projet trouvé dans ce fichier.");
-    } catch(err){ alert("Fichier invalide : " + err.message); }
+      toast(n ? n + " projet(s) importé(s)." : "Aucun projet trouvé dans ce fichier.");
+    } catch(err){ toast("Fichier invalide : " + err.message); }
   });
   e.target.value = "";
 });
