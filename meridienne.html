@@ -1,0 +1,740 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Méridienne — Atelier d'horlogerie, Besançon</title>
+<style>
+  :root{
+    --encre:#0e1216;
+    --nuit:#151b21;
+    --nuit2:#1b232b;
+    --ivoire:#eae4d6;
+    --ivoire-2:#b9b2a2;
+    --champagne:#c9a96e;
+    --champagne-dim:rgba(201,169,110,.28);
+    --acier:#78838e;
+    --laque:#c0452c;
+    --serif:"Didot","Bodoni 72","Playfair Display",Georgia,serif;
+    --sans:"Avenir Next","Avenir",-apple-system,"Segoe UI",Roboto,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --mesure:64ch;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} }
+  body{
+    background:var(--encre); color:var(--ivoire);
+    font:16px/1.7 var(--sans);
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--champagne); text-decoration:none}
+  a:hover{text-decoration:underline; text-underline-offset:3px}
+  :focus-visible{outline:2px solid var(--champagne); outline-offset:3px; border-radius:2px}
+  ::selection{background:var(--champagne); color:var(--encre)}
+
+  .eyebrow{
+    font:600 11px/1 var(--sans); letter-spacing:.32em; text-transform:uppercase;
+    color:var(--champagne);
+  }
+  .filet{border:none; border-top:1px solid var(--champagne-dim)}
+
+  /* ================= Header ================= */
+  header{
+    position:sticky; top:0; z-index:10;
+    display:flex; align-items:baseline; gap:28px;
+    padding:20px clamp(20px,5vw,64px);
+    background:color-mix(in srgb, var(--encre) 88%, transparent);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--champagne-dim);
+  }
+  .marque{font:400 20px var(--serif); letter-spacing:.14em; text-transform:uppercase}
+  .marque i{font-style:normal; color:var(--laque)}
+  header nav{margin-left:auto; display:flex; gap:24px; flex-wrap:wrap}
+  header nav a{
+    color:var(--ivoire-2); font-size:12.5px; letter-spacing:.14em; text-transform:uppercase;
+  }
+  header nav a:hover{color:var(--ivoire); text-decoration:none}
+
+  /* ================= Héro ================= */
+  .hero{
+    position:relative; overflow:hidden;
+    display:grid; grid-template-columns:minmax(0,5fr) minmax(0,4fr);
+    align-items:center; gap:clamp(24px,4vw,64px);
+    min-height:calc(100vh - 65px); min-height:calc(100dvh - 65px);
+    padding:clamp(32px,6vw,80px) clamp(20px,5vw,64px);
+  }
+  #guilloche{position:absolute; inset:0; width:100%; height:100%; opacity:.85; pointer-events:none}
+  .hero > *{position:relative}
+  .hero h1{
+    font:400 clamp(44px,7vw,96px)/1.04 var(--serif);
+    letter-spacing:-.01em; text-wrap:balance; margin:20px 0 24px;
+  }
+  .hero h1 em{font-style:italic; color:var(--champagne)}
+  .hero .sous{
+    max-width:44ch; color:var(--ivoire-2); font-size:17px;
+  }
+  .hero .sceau{
+    margin-top:44px; display:flex; align-items:center; gap:16px;
+    font:500 12px/1.5 var(--mono); color:var(--acier); letter-spacing:.06em;
+  }
+  .hero .sceau::before{content:""; width:56px; height:1px; background:var(--champagne)}
+  .cadran-hero{display:grid; place-items:center}
+  .cadran-hero canvas{
+    width:min(76vw,52vh,460px); aspect-ratio:1;
+    filter:drop-shadow(0 30px 60px rgba(0,0,0,.55));
+  }
+  #heureVraie{
+    margin-top:26px; text-align:center;
+    font:500 13px/1.6 var(--mono); font-variant-numeric:tabular-nums;
+    color:var(--acier); letter-spacing:.1em;
+  }
+  #heureVraie b{color:var(--ivoire); font-weight:600}
+
+  /* ================= Sections ================= */
+  section{padding:clamp(64px,10vw,130px) clamp(20px,5vw,64px)}
+  .cadre{max-width:1120px; margin:0 auto}
+  .titre-section{
+    font:400 clamp(30px,4vw,52px)/1.15 var(--serif); text-wrap:balance;
+    margin:18px 0 8px;
+  }
+  .titre-section em{font-style:italic; color:var(--champagne)}
+
+  /* --- Manifeste --- */
+  .manifeste{border-top:1px solid var(--champagne-dim)}
+  .manifeste .cadre{display:grid; grid-template-columns:minmax(0,2fr) minmax(0,3fr); gap:clamp(28px,5vw,80px)}
+  .manifeste .prose p{max-width:var(--mesure); color:var(--ivoire-2); margin-bottom:1.2em}
+  .manifeste .prose p:first-child{color:var(--ivoire); font-size:18.5px}
+  .manifeste .prose p:first-child::first-letter{
+    font:400 3.1em/0.85 var(--serif); color:var(--champagne);
+    float:left; padding:6px 10px 0 0;
+  }
+  .chiffres{
+    margin-top:36px; display:grid; grid-template-columns:repeat(3,auto); gap:32px;
+    font-variant-numeric:tabular-nums;
+  }
+  .chiffres b{display:block; font:400 34px/1.1 var(--serif); color:var(--ivoire)}
+  .chiffres span{font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--acier)}
+
+  /* --- Le geste (séquence réelle de fabrication) --- */
+  .geste{background:var(--nuit); border-block:1px solid var(--champagne-dim)}
+  .etapes{
+    margin-top:44px; display:grid; grid-template-columns:repeat(4,1fr); gap:1px;
+    background:var(--champagne-dim);
+  }
+  .etape{background:var(--nuit); padding:28px 24px 32px}
+  .etape .num{
+    font:400 15px var(--serif); font-style:italic; color:var(--champagne);
+  }
+  .etape h3{font:600 15px/1.4 var(--sans); letter-spacing:.04em; margin:14px 0 8px}
+  .etape p{font-size:13.5px; color:var(--ivoire-2)}
+
+  /* --- Complications --- */
+  .complications .cadre{
+    display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    gap:clamp(28px,5vw,72px); align-items:center;
+  }
+  .complications .note{color:var(--ivoire-2); max-width:46ch; margin-top:14px}
+  .choix{margin-top:30px; display:flex; flex-direction:column; gap:10px}
+  .choix button{
+    display:flex; align-items:baseline; gap:14px; text-align:left;
+    font:inherit; color:var(--ivoire-2); background:none; cursor:pointer;
+    border:1px solid var(--champagne-dim); border-radius:2px;
+    padding:14px 18px; transition:border-color .2s, color .2s, background .2s;
+  }
+  .choix button:hover{border-color:var(--champagne); color:var(--ivoire)}
+  .choix button[aria-pressed="true"]{
+    background:var(--nuit2); border-color:var(--champagne); color:var(--ivoire);
+  }
+  .choix .rom{font:400 15px var(--serif); font-style:italic; color:var(--champagne); min-width:26px}
+  .choix small{display:block; font-size:12.5px; color:var(--acier)}
+  .cadran-complications{display:grid; place-items:center}
+  .cadran-complications canvas{
+    width:min(76vw,420px); aspect-ratio:1;
+    filter:drop-shadow(0 24px 48px rgba(0,0,0,.5));
+  }
+  #legendeComp{
+    margin-top:22px; text-align:center; font:500 12.5px/1.6 var(--mono);
+    color:var(--acier); letter-spacing:.08em; min-height:2.6em; max-width:38ch;
+  }
+
+  /* --- Collection --- */
+  .collection{background:var(--nuit); border-block:1px solid var(--champagne-dim)}
+  .modeles{margin-top:48px; display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(20px,3vw,40px)}
+  .modele{
+    border:1px solid var(--champagne-dim); border-radius:2px;
+    padding:36px 28px 30px; background:var(--encre);
+    display:flex; flex-direction:column; align-items:center; gap:0;
+    transition:transform .3s, border-color .3s;
+  }
+  .modele:hover{transform:translateY(-6px); border-color:var(--champagne)}
+  .modele canvas{width:min(58vw,190px); aspect-ratio:1; margin-bottom:26px}
+  .modele h3{font:400 22px var(--serif); letter-spacing:.02em}
+  .modele .cal{font:500 11.5px var(--mono); color:var(--acier); letter-spacing:.1em; margin:8px 0 16px}
+  .modele p{font-size:13.5px; color:var(--ivoire-2); text-align:center; max-width:30ch}
+  .modele .prix{
+    margin-top:auto; padding-top:22px; font:500 13px var(--mono);
+    font-variant-numeric:tabular-nums; color:var(--champagne); letter-spacing:.06em;
+  }
+
+  /* --- Calibre (specs) --- */
+  .calibre .cadre{display:grid; grid-template-columns:minmax(0,2fr) minmax(0,3fr); gap:clamp(28px,5vw,80px)}
+  .calibre .intro{color:var(--ivoire-2); max-width:40ch; margin-top:14px}
+  .specs{width:100%; border-collapse:collapse; font:500 13.5px/1.5 var(--mono); font-variant-numeric:tabular-nums}
+  .specs td{padding:13px 8px; border-bottom:1px solid var(--champagne-dim); vertical-align:top}
+  .specs td:first-child{color:var(--acier); letter-spacing:.06em; white-space:nowrap; padding-right:28px}
+  .specs td:last-child{color:var(--ivoire)}
+  .specs tr:first-child td{border-top:1px solid var(--champagne-dim)}
+
+  /* ================= Pied ================= */
+  footer{
+    border-top:1px solid var(--champagne-dim);
+    padding:44px clamp(20px,5vw,64px) 56px;
+    display:flex; gap:32px; flex-wrap:wrap; align-items:baseline;
+    color:var(--acier); font-size:13px;
+  }
+  footer .marque{font-size:16px}
+  footer .adresse{font-family:var(--mono); font-size:12px; letter-spacing:.05em}
+  footer .spacer{margin-left:auto; font-style:italic; font-family:var(--serif); font-size:14px; color:var(--ivoire-2)}
+
+  /* ================= Apparitions ================= */
+  .reveal{opacity:0; transform:translateY(26px); transition:opacity .8s ease, transform .8s ease}
+  .reveal.vu{opacity:1; transform:none}
+  @media (prefers-reduced-motion:reduce){
+    .reveal{opacity:1; transform:none; transition:none}
+    .modele{transition:none}
+    .modele:hover{transform:none}
+  }
+
+  /* ================= Écrans étroits ================= */
+  @media (max-width:900px){
+    .hero{grid-template-columns:1fr; min-height:0; gap:48px; text-align:left}
+    .manifeste .cadre, .complications .cadre, .calibre .cadre{grid-template-columns:1fr}
+    .etapes{grid-template-columns:1fr 1fr}
+    .modeles{grid-template-columns:1fr}
+    header nav{gap:16px}
+  }
+  @media (max-width:520px){
+    .etapes{grid-template-columns:1fr}
+    .chiffres{grid-template-columns:repeat(3,auto); gap:18px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="marque">Méridienne<i>.</i></div>
+  <nav aria-label="Navigation principale">
+    <a href="#manifeste">La maison</a>
+    <a href="#complications">Complications</a>
+    <a href="#collection">Collection</a>
+    <a href="#calibre">Calibre</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ============ Héro ============ -->
+  <section class="hero" aria-label="Présentation">
+    <canvas id="guilloche" aria-hidden="true"></canvas>
+    <div>
+      <p class="eyebrow">Atelier d'horlogerie · Besançon</p>
+      <h1>Le temps,<br>tenu <em>à la main.</em></h1>
+      <p class="sous">
+        Trente-huit montres par an. Pas une de plus. Chaque pièce naît, se règle
+        et se signe sur le même établi, quai Veil-Picard, face au Doubs.
+      </p>
+      <p class="sceau">MANUFACTURE FRANÇAISE · DEPUIS 1987</p>
+    </div>
+    <div class="cadran-hero">
+      <div>
+        <canvas id="cadranHero" role="img" aria-label="Montre Méridienne indiquant l'heure actuelle"></canvas>
+        <p id="heureVraie">—</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Manifeste ============ -->
+  <section class="manifeste" id="manifeste">
+    <div class="cadre reveal">
+      <div>
+        <p class="eyebrow">La maison</p>
+        <h2 class="titre-section">Une aiguille n'a pas le droit <em>d'hésiter.</em></h2>
+        <div class="chiffres">
+          <div><b>38</b><span>pièces / an</span></div>
+          <div><b>231</b><span>composants</span></div>
+          <div><b>72 h</b><span>de réserve</span></div>
+        </div>
+      </div>
+      <div class="prose">
+        <p>
+          Besançon fut la capitale horlogère de la France. Il en reste une lumière
+          particulière sur les toits, quelques établis de noyer, et une conviction :
+          la précision est une politesse que l'on doit au temps des autres.
+        </p>
+        <p>
+          Méridienne n'a ni usine, ni catalogue de saison. L'atelier assemble un seul
+          calibre, le M-03, décliné en trois cadrans. Chaque platine est anglée à la
+          lime, chaque vis bleuie à la flamme, chaque spiral compté à l'oreille avant
+          de l'être à la machine.
+        </p>
+        <p>
+          Nous livrons quand la montre est juste — au sens des horlogers comme au
+          sens des justes. Certaines années, cela fait trente-huit pièces. D'autres,
+          trente-quatre.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Le geste ============ -->
+  <section class="geste">
+    <div class="cadre reveal">
+      <p class="eyebrow">Le geste</p>
+      <h2 class="titre-section">Quatre semaines, quatre <em>états de la matière.</em></h2>
+      <div class="etapes">
+        <div class="etape">
+          <span class="num">I.</span>
+          <h3>Ébauche</h3>
+          <p>La platine et les ponts sont taillés dans le maillechort, puis percés au dixième de millimètre.</p>
+        </div>
+        <div class="etape">
+          <span class="num">II.</span>
+          <h3>Anglage</h3>
+          <p>Chaque arête est cassée à 45° à la lime, puis polie au buis jusqu'au miroir. Douze heures par pont.</p>
+        </div>
+        <div class="etape">
+          <span class="num">III.</span>
+          <h3>Guillochage</h3>
+          <p>Le cadran passe au tour à guillocher de 1911 — le motif « ondes du Doubs », gravé d'un seul trait.</p>
+        </div>
+        <div class="etape">
+          <span class="num">IV.</span>
+          <h3>Réglage</h3>
+          <p>Cinq positions, trois températures, trente jours d'observation. Tolérance : deux secondes par jour.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Complications ============ -->
+  <section class="complications" id="complications">
+    <div class="cadre">
+      <div class="reveal">
+        <p class="eyebrow">Complications</p>
+        <h2 class="titre-section">Cette montre est <em>vivante.</em></h2>
+        <p class="note">
+          Le cadran ci-contre est dessiné en direct par votre appareil : il indique
+          l'heure vraie, et sa lune est celle du ciel de ce soir. Choisissez une
+          complication pour reconfigurer le mouvement.
+        </p>
+        <div class="choix" role="group" aria-label="Choisir une complication">
+          <button data-mode="trois" aria-pressed="true">
+            <span class="rom">I.</span>
+            <span>Trois aiguilles<small>Le calibre nu — heures, minutes, seconde rouge laque.</small></span>
+          </button>
+          <button data-mode="lune" aria-pressed="false">
+            <span class="rom">II.</span>
+            <span>Phase de lune<small>Guichet à 6 h. Calculée sur la date réelle, exacte à un jour près sur un siècle.</small></span>
+          </button>
+          <button data-mode="reserve" aria-pressed="false">
+            <span class="rom">III.</span>
+            <span>Réserve de marche<small>Indicateur à 9 h — l'énergie restante du barillet, 72 heures pleines.</small></span>
+          </button>
+          <button data-mode="quantieme" aria-pressed="false">
+            <span class="rom">IV.</span>
+            <span>Quantième<small>Guichet à 3 h, disque argenté, saut à minuit précise.</small></span>
+          </button>
+        </div>
+      </div>
+      <div class="cadran-complications reveal">
+        <div>
+          <canvas id="cadranComp" role="img" aria-label="Montre de démonstration des complications"></canvas>
+          <p id="legendeComp"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Collection ============ -->
+  <section class="collection" id="collection">
+    <div class="cadre reveal">
+      <p class="eyebrow">Collection</p>
+      <h2 class="titre-section">Un calibre, trois <em>lumières.</em></h2>
+      <div class="modeles">
+        <article class="modele">
+          <canvas data-teinte="ivoire" role="img" aria-label="Montre Méridienne cadran ivoire"></canvas>
+          <h3>Méridienne 38</h3>
+          <p class="cal">CAL. M-03 · CADRAN IVOIRE</p>
+          <p>Laque ivoire tendue en sept couches, chiffres peints au pinceau une soie.</p>
+          <p class="prix">18 400 €</p>
+        </article>
+        <article class="modele">
+          <canvas data-teinte="ardoise" role="img" aria-label="Montre Méridienne cadran ardoise"></canvas>
+          <h3>Méridienne Nuit</h3>
+          <p class="cal">CAL. M-03 · CADRAN ARDOISE</p>
+          <p>Ardoise guillochée « ondes du Doubs », index en or gris appliqués main.</p>
+          <p class="prix">21 900 €</p>
+        </article>
+        <article class="modele">
+          <canvas data-teinte="empire" role="img" aria-label="Montre Méridienne cadran vert Empire"></canvas>
+          <h3>Méridienne Empire</h3>
+          <p class="cal">CAL. M-03 · CADRAN VERT EMPIRE</p>
+          <p>Vert profond translucide sur guillochage soleil. Douze pièces, numérotées.</p>
+          <p class="prix">Sur demande</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Calibre ============ -->
+  <section class="calibre" id="calibre">
+    <div class="cadre reveal">
+      <div>
+        <p class="eyebrow">Calibre M-03</p>
+        <h2 class="titre-section">La feuille <em>de marche.</em></h2>
+        <p class="intro">
+          Chaque montre quitte l'atelier avec sa feuille de réglage manuscrite.
+          Voici celle du calibre, avant qu'elle ne porte votre numéro.
+        </p>
+      </div>
+      <table class="specs">
+        <tbody>
+          <tr><td>Remontage</td><td>Manuel, 33 tours de couronne</td></tr>
+          <tr><td>Fréquence</td><td>28 800 alternances / heure — 4 Hz</td></tr>
+          <tr><td>Réserve de marche</td><td>72 heures, deux barillets en série</td></tr>
+          <tr><td>Composants</td><td>231, dont 26 rubis</td></tr>
+          <tr><td>Spiral</td><td>Breguet, courbe terminale relevée main</td></tr>
+          <tr><td>Marche observée</td><td>−1 / +2 s par jour, cinq positions</td></tr>
+          <tr><td>Diamètre · hauteur</td><td>38,0 mm · 9,2 mm, acier ou or rose</td></tr>
+          <tr><td>Étanchéité</td><td>5 atm — la pluie de Besançon, pas la mer</td></tr>
+          <tr><td>Garantie</td><td>Dix ans, révision offerte à la cinquième</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <span class="marque">Méridienne<i>.</i></span>
+  <span class="adresse">3, quai Veil-Picard · 25000 Besançon · sur rendez-vous</span>
+  <span class="spacer">« La précision est une politesse. »</span>
+</footer>
+
+<script>
+"use strict";
+
+/* =====================================================
+   Méridienne — cadrans dessinés en canvas, heure réelle
+   ===================================================== */
+
+const reduitMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const TEINTES = {
+  nuit:   { fond:"#11161c", fond2:"#0b0f13", index:"#c9a96e", texte:"#eae4d6", piste:"#3a4149" },
+  ivoire: { fond:"#e8e1d1", fond2:"#d9d0bc", index:"#2a2d33", texte:"#2a2d33", piste:"#9a917d" },
+  ardoise:{ fond:"#2e343b", fond2:"#232930", index:"#c9a96e", texte:"#d8d2c4", piste:"#565e67" },
+  empire: { fond:"#1d3a2f", fond2:"#142a22", index:"#c9a96e", texte:"#dcd6c8", piste:"#3d5c4e" },
+};
+const CHAMPAGNE = "#c9a96e", LAQUE = "#c0452c";
+
+/* ---------- Préparation d'un canvas net (DPR) ---------- */
+function prepare(canvas){
+  const dpr = Math.min(devicePixelRatio || 1, 3);
+  const r = canvas.getBoundingClientRect();
+  const size = Math.max(10, Math.round(r.width));
+  canvas.width = size * dpr;
+  canvas.height = size * dpr;
+  const ctx = canvas.getContext("2d");
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { ctx, size };
+}
+
+/* ---------- Phase de lune (réelle) ---------- */
+/* Nouvelle lune de référence : 6 janvier 2000, 18h14 UTC. Synodique : 29,530588 j */
+function phaseLune(date){
+  const ref = Date.UTC(2000, 0, 6, 18, 14);
+  const syn = 29.530588 * 86400000;
+  let p = ((date.getTime() - ref) % syn) / syn;
+  if (p < 0) p += 1;
+  return p; // 0 = nouvelle lune, .5 = pleine lune
+}
+
+/* ---------- Dessin d'un cadran ---------- */
+function dessineCadran(ctx, size, opts){
+  const { teinte = "nuit", mode = "trois", temps = new Date(), statique = false } = opts;
+  const T = TEINTES[teinte];
+  const c = size / 2, R = size / 2 - 4;
+  ctx.clearRect(0, 0, size, size);
+
+  /* Boîtier */
+  ctx.beginPath(); ctx.arc(c, c, R, 0, 7);
+  ctx.fillStyle = "#0a0d10"; ctx.fill();
+  ctx.lineWidth = 2; ctx.strokeStyle = "#3d3325"; ctx.stroke();
+  ctx.beginPath(); ctx.arc(c, c, R - 2.5, 0, 7);
+  ctx.strokeStyle = CHAMPAGNE; ctx.lineWidth = 1.2; ctx.stroke();
+
+  /* Fond du cadran, léger dégradé radial */
+  const rF = R - 8;
+  const g = ctx.createRadialGradient(c, c - rF * .35, rF * .1, c, c, rF);
+  g.addColorStop(0, T.fond); g.addColorStop(1, T.fond2);
+  ctx.beginPath(); ctx.arc(c, c, rF, 0, 7); ctx.fillStyle = g; ctx.fill();
+
+  /* Guillochage soleil discret */
+  ctx.save();
+  ctx.beginPath(); ctx.arc(c, c, rF, 0, 7); ctx.clip();
+  ctx.globalAlpha = .12; ctx.strokeStyle = T.piste; ctx.lineWidth = .5;
+  for (let i = 0; i < 72; i++){
+    const a = i / 72 * Math.PI * 2;
+    ctx.beginPath(); ctx.moveTo(c, c);
+    ctx.lineTo(c + Math.cos(a) * rF, c + Math.sin(a) * rF); ctx.stroke();
+  }
+  ctx.restore();
+
+  /* Piste des minutes + index */
+  for (let i = 0; i < 60; i++){
+    const a = i / 60 * Math.PI * 2 - Math.PI / 2;
+    const grand = i % 5 === 0;
+    const r1 = rF - (grand ? size * .052 : size * .028), r2 = rF - size * .012;
+    ctx.beginPath();
+    ctx.moveTo(c + Math.cos(a) * r1, c + Math.sin(a) * r1);
+    ctx.lineTo(c + Math.cos(a) * r2, c + Math.sin(a) * r2);
+    ctx.strokeStyle = grand ? T.index : T.piste;
+    ctx.lineWidth = grand ? Math.max(1.6, size * .008) : .8;
+    ctx.stroke();
+  }
+
+  /* Signature */
+  ctx.fillStyle = T.texte;
+  ctx.textAlign = "center";
+  ctx.font = `${Math.max(9, size * .052)}px Didot, Georgia, serif`;
+  ctx.fillText("Méridienne", c, c - rF * .42);
+  ctx.font = `${Math.max(6, size * .026)}px ui-monospace, Menlo, monospace`;
+  ctx.globalAlpha = .55;
+  ctx.fillText("BESANÇON", c, c - rF * .30);
+  ctx.globalAlpha = 1;
+
+  /* ----- Complications ----- */
+  if (mode === "lune"){
+    const lc = { x: c, y: c + rF * .52 }, lr = rF * .21;
+    ctx.beginPath(); ctx.arc(lc.x, lc.y, lr, 0, 7);
+    ctx.fillStyle = "#0b1020"; ctx.fill();
+    ctx.strokeStyle = CHAMPAGNE; ctx.lineWidth = 1; ctx.stroke();
+    /* étoiles */
+    ctx.fillStyle = "rgba(234,228,214,.8)";
+    [[-.5,-.35],[.45,-.5],[.6,.3],[-.6,.4],[.1,.62]].forEach(([dx,dy]) => {
+      ctx.beginPath(); ctx.arc(lc.x + dx * lr, lc.y + dy * lr, size * .004, 0, 7); ctx.fill();
+    });
+    /* lune : disque clair + ombre décalée selon la phase */
+    const p = phaseLune(temps), mr = lr * .48;
+    ctx.save();
+    ctx.beginPath(); ctx.arc(lc.x, lc.y, mr, 0, 7); ctx.clip();
+    ctx.fillStyle = "#e9e2cf";
+    ctx.fillRect(lc.x - mr, lc.y - mr, mr * 2, mr * 2);
+    /* ombre : deux disques sombres glissant sur le disque lunaire */
+    const k = Math.cos(p * Math.PI * 2); // 1 = nouvelle, -1 = pleine
+    ctx.fillStyle = "#0b1020";
+    const dir = p < .5 ? 1 : -1;
+    ctx.beginPath();
+    ctx.ellipse(lc.x - dir * mr * (1 - Math.abs(k)) , lc.y, mr * Math.abs(k) + .001, mr, 0, 0, 7);
+    if (Math.abs(k) > .02 || p < .02 || p > .98) ctx.fill();
+    if (p < .04 || p > .96){ /* nouvelle lune : tout sombre */
+      ctx.beginPath(); ctx.arc(lc.x, lc.y, mr, 0, 7); ctx.fill();
+    }
+    ctx.restore();
+    ctx.beginPath(); ctx.arc(lc.x, lc.y, mr, 0, 7);
+    ctx.strokeStyle = "rgba(201,169,110,.5)"; ctx.lineWidth = .8; ctx.stroke();
+  }
+
+  if (mode === "reserve"){
+    const gc = { x: c - rF * .5, y: c }, gr = rF * .24;
+    ctx.beginPath(); ctx.arc(gc.x, gc.y, gr, 0, 7);
+    ctx.fillStyle = "rgba(0,0,0,.18)"; ctx.fill();
+    ctx.strokeStyle = T.piste; ctx.lineWidth = .8; ctx.stroke();
+    const a0 = Math.PI * .75, a1 = Math.PI * 2.25;
+    ctx.beginPath(); ctx.arc(gc.x, gc.y, gr * .72, a0, a1);
+    ctx.strokeStyle = T.piste; ctx.lineWidth = 2; ctx.stroke();
+    /* niveau : on simule une descente lente sur la journée */
+    const frac = statique ? .78
+      : 1 - ((temps.getHours() * 3600 + temps.getMinutes() * 60 + temps.getSeconds()) % 259200) / 259200;
+    ctx.beginPath(); ctx.arc(gc.x, gc.y, gr * .72, a0, a0 + (a1 - a0) * frac);
+    ctx.strokeStyle = frac < .2 ? LAQUE : CHAMPAGNE; ctx.lineWidth = 2; ctx.stroke();
+    const an = a0 + (a1 - a0) * frac;
+    ctx.beginPath(); ctx.moveTo(gc.x, gc.y);
+    ctx.lineTo(gc.x + Math.cos(an) * gr * .62, gc.y + Math.sin(an) * gr * .62);
+    ctx.strokeStyle = T.texte; ctx.lineWidth = 1.4; ctx.stroke();
+    ctx.font = `${Math.max(5, size * .022)}px ui-monospace, monospace`;
+    ctx.fillStyle = T.texte; ctx.globalAlpha = .6;
+    ctx.fillText("RÉSERVE", gc.x, gc.y + gr * .5);
+    ctx.globalAlpha = 1;
+  }
+
+  if (mode === "quantieme"){
+    const q = { x: c + rF * .52, y: c }, qw = rF * .3, qh = rF * .2;
+    ctx.fillStyle = "#efe9da";
+    ctx.fillRect(q.x - qw / 2, q.y - qh / 2, qw, qh);
+    ctx.strokeStyle = CHAMPAGNE; ctx.lineWidth = 1;
+    ctx.strokeRect(q.x - qw / 2, q.y - qh / 2, qw, qh);
+    ctx.fillStyle = "#1a1d22";
+    ctx.font = `600 ${qh * .68}px ui-monospace, monospace`;
+    ctx.textBaseline = "middle";
+    ctx.fillText(String(temps.getDate()), q.x, q.y + qh * .05);
+    ctx.textBaseline = "alphabetic";
+  }
+
+  /* ----- Aiguilles ----- */
+  const h = temps.getHours() % 12, m = temps.getMinutes(),
+        s = temps.getSeconds(), ms = statique ? 0 : temps.getMilliseconds();
+  const aH = ((h + m / 60) / 12) * Math.PI * 2 - Math.PI / 2;
+  const aM = ((m + s / 60) / 60) * Math.PI * 2 - Math.PI / 2;
+  const sSmooth = reduitMotion ? s : s + ms / 1000;
+  const aS = (sSmooth / 60) * Math.PI * 2 - Math.PI / 2;
+
+  function aiguille(angle, longueur, largeur, couleur, contre = 0){
+    ctx.beginPath();
+    ctx.moveTo(c - Math.cos(angle) * contre, c - Math.sin(angle) * contre);
+    ctx.lineTo(c + Math.cos(angle) * longueur, c + Math.sin(angle) * longueur);
+    ctx.lineCap = "round"; ctx.strokeStyle = couleur; ctx.lineWidth = largeur;
+    ctx.stroke();
+  }
+  ctx.save();
+  ctx.shadowColor = "rgba(0,0,0,.45)"; ctx.shadowBlur = size * .015; ctx.shadowOffsetY = size * .008;
+  aiguille(aH, rF * .5, Math.max(2.4, size * .016), T.index);
+  aiguille(aM, rF * .74, Math.max(1.8, size * .011), T.index);
+  aiguille(aS, rF * .8, Math.max(1, size * .005), LAQUE, rF * .18);
+  ctx.restore();
+  ctx.beginPath(); ctx.arc(c, c, Math.max(2.5, size * .016), 0, 7);
+  ctx.fillStyle = LAQUE; ctx.fill();
+  ctx.beginPath(); ctx.arc(c, c, Math.max(1, size * .006), 0, 7);
+  ctx.fillStyle = "#0a0d10"; ctx.fill();
+}
+
+/* ---------- Cadran héro : heure vraie ---------- */
+const heroCanvas = document.getElementById("cadranHero");
+const heureVraie = document.getElementById("heureVraie");
+let hero = prepare(heroCanvas);
+
+function bouclePrincipale(){
+  const t = new Date();
+  dessineCadran(hero.ctx, hero.size, { teinte:"nuit", mode:"trois", temps:t });
+  dessineCadran(comp.ctx, comp.size, { teinte:"ardoise", mode:modeComp, temps:t });
+  if (t.getSeconds() !== derniereSeconde){
+    derniereSeconde = t.getSeconds();
+    heureVraie.innerHTML = "<b>" + t.toLocaleTimeString("fr-FR") + "</b> · heure de votre appareil";
+  }
+  if (reduitMotion) setTimeout(bouclePrincipale, 1000);
+  else requestAnimationFrame(bouclePrincipale);
+}
+let derniereSeconde = -1;
+
+/* ---------- Cadran complications ---------- */
+const compCanvas = document.getElementById("cadranComp");
+let comp = prepare(compCanvas);
+let modeComp = "trois";
+const legende = document.getElementById("legendeComp");
+const LEGENDES = {
+  trois: "CAL. M-03 · ÉTAT I — TROIS AIGUILLES",
+  lune: () => {
+    const p = phaseLune(new Date());
+    const noms = ["nouvelle lune","premier croissant","premier quartier","gibbeuse croissante",
+                  "pleine lune","gibbeuse décroissante","dernier quartier","dernier croissant"];
+    const nom = noms[Math.round(p * 8) % 8];
+    return "CAL. M-03 · ÉTAT II — CE SOIR : " + nom.toUpperCase();
+  },
+  reserve: "CAL. M-03 · ÉTAT III — BARILLETS EN SÉRIE, 72 H",
+  quantieme: "CAL. M-03 · ÉTAT IV — QUANTIÈME À 3 H",
+};
+function majLegende(){
+  const l = LEGENDES[modeComp];
+  legende.textContent = typeof l === "function" ? l() : l;
+}
+document.querySelectorAll(".choix button").forEach(b => {
+  b.addEventListener("click", () => {
+    modeComp = b.dataset.mode;
+    document.querySelectorAll(".choix button").forEach(x =>
+      x.setAttribute("aria-pressed", String(x === b)));
+    majLegende();
+  });
+});
+majLegende();
+
+/* ---------- Cadrans de la collection (heure de vitrine : 10 h 09) ---------- */
+const VITRINE = new Date(2026, 0, 1, 10, 9, 37);
+function dessineVitrines(){
+  document.querySelectorAll(".modele canvas").forEach(cv => {
+    const { ctx, size } = prepare(cv);
+    dessineCadran(ctx, size, { teinte: cv.dataset.teinte, temps: VITRINE, statique:true });
+  });
+}
+
+/* ---------- Guilloché du héro ---------- */
+const gCanvas = document.getElementById("guilloche");
+let gPattern = null, gAngle = 0;
+function construitGuilloche(){
+  const dpr = Math.min(devicePixelRatio || 1, 2);
+  const r = gCanvas.getBoundingClientRect();
+  gCanvas.width = r.width * dpr; gCanvas.height = r.height * dpr;
+  const D = Math.hypot(r.width, r.height) * 1.2;
+  gPattern = document.createElement("canvas");
+  gPattern.width = gPattern.height = D * dpr;
+  const p = gPattern.getContext("2d");
+  p.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const cx = D / 2, cy = D / 2;
+  p.strokeStyle = "rgba(201,169,110,.05)";
+  p.lineWidth = .7;
+  for (let i = 0; i < 46; i++){
+    const base = 30 + i * (D / 2 - 30) / 46;
+    p.beginPath();
+    for (let a = 0; a <= 360; a += 2){
+      const th = a * Math.PI / 180;
+      const rr = base + Math.sin(th * 9 + i * .7) * 7;
+      const x = cx + Math.cos(th) * rr, y = cy + Math.sin(th) * rr;
+      a === 0 ? p.moveTo(x, y) : p.lineTo(x, y);
+    }
+    p.closePath(); p.stroke();
+  }
+}
+function dessineGuilloche(){
+  const ctx = gCanvas.getContext("2d");
+  const w = gCanvas.width, h = gCanvas.height;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.clearRect(0, 0, w, h);
+  /* centré sur le cadran héro (droite de l'écran sur desktop) */
+  const large = innerWidth > 900;
+  ctx.translate(large ? w * .72 : w * .5, h * (large ? .5 : .72));
+  ctx.rotate(gAngle);
+  ctx.drawImage(gPattern, -gPattern.width / 2, -gPattern.height / 2);
+}
+function boucleGuilloche(){
+  gAngle += .0006;
+  dessineGuilloche();
+  requestAnimationFrame(boucleGuilloche);
+}
+
+/* ---------- Apparitions au défilement ---------- */
+const io = new IntersectionObserver(entries => {
+  for (const e of entries) if (e.isIntersecting){ e.target.classList.add("vu"); io.unobserve(e.target); }
+}, { threshold: .12 });
+document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+
+/* ---------- Redimensionnement ---------- */
+let rTimer = null;
+addEventListener("resize", () => {
+  clearTimeout(rTimer);
+  rTimer = setTimeout(() => {
+    hero = prepare(heroCanvas);
+    comp = prepare(compCanvas);
+    construitGuilloche(); dessineGuilloche();
+    dessineVitrines();
+  }, 180);
+});
+
+/* ---------- Départ ---------- */
+construitGuilloche();
+dessineVitrines();
+if (reduitMotion) dessineGuilloche();
+else boucleGuilloche();
+bouclePrincipale();
+</script>
+</body>
+</html>
